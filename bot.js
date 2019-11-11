@@ -1,3 +1,10 @@
+function GetToken(){
+  const fs = require('fs');
+  rawdata = fs.readFileSync('auth.json');
+  var AuthData = JSON.parse(rawdata);
+  return AuthData.token
+}
+
 const Discord = require('discord.js')
 const bot = new Discord.Client()
 
@@ -7,8 +14,8 @@ bot.on('ready', () => {
   
   bot.on('message', msg => {
     if (msg.content === 'ping') {
-      msg.reply('pong');
+      msg.reply('pong',String);
     }
   });
 
-bot.login('NjQzNDgzMDg4MTA1NTA0NzY5.XcmIaA.8p0WKJ08mHivZhxS1iiBn4twYq0')
+bot.login(GetToken())
