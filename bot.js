@@ -2,15 +2,25 @@
 const Discord = require('discord.js');
 const Octokit = require("@octokit/rest");
 
+// Import
+  // import "Bot_utils.js"
+  var Utils = require('./bot_utils.js');
+
 /*
       *GITHUB BOT INIT*
  */
 
+ // Load github info from auth.json
+const Github_info = Utils.GetGithubInfo();
+const Github_username = Github_info[0]
+const Github_password = Github_info[1]
+const Github_repo_username = Github_info[2]
+const Github_repo_name = Github_info[3]
 // basic auth
 const octokit = new Octokit({  // "octokit" is our Github bot client
   auth: {
-    username: "KanbanBotDiscord",
-    password: "jesuisunrobot1",
+    username: Github_username,
+    password: Github_password,
     async on2fa() {
       // example: ask the user
       return prompt("Two-factor authentication Code:");
@@ -31,8 +41,6 @@ bot.on('ready', () => {
     console.log(`Logged in as ${bot.user.tag}!`);
   });
   
-  // import "Bot_utils.js"
-  var Utils = require('./bot_utils.js');
   // Get bot token from auth.json file
   Token = Utils.GetToken()
 
@@ -43,7 +51,7 @@ bot.on('ready', () => {
 
 
 
-  /* SandBox part */
+  /* SandBox part */  // TODO : remove this 
 
  // Watch every message's content on the server
  bot.on('message', msg => {
@@ -53,9 +61,8 @@ bot.on('ready', () => {
   }
 });
 
-
   var ListOfIssues = octokit.issues.listForRepo({
-    owner:"KanbanBotDiscord",
-    repo:"repo_test"
+    owner:Github_repo_username,
+    repo:Github_repo_name
   })
    console.log(ListOfIssues);
