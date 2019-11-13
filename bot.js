@@ -26,7 +26,23 @@ const octokit = new Octokit({  // "octokit" is our Github bot client
       // example: ask the user
       return prompt("Two-factor authentication Code:");
     }
-  }
+  },
+  userAgent: 'KanbanBot v1.0.0',
+  timeZone: 'Europe/Amsterdam',
+  baseUrl: 'https://api.github.com',
+  log: {
+    debug: () => {},
+    info: () => {},
+    warn: console.warn,
+    error: console.error
+  },
+  request: {
+    agent: undefined,
+    fetch: undefined,
+    timeout: 0
+  },
+
+
  });
  console.log(`Logged in as ${Github_username} (Github)!`);
 
