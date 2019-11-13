@@ -7,46 +7,47 @@ const Octokit = require("@octokit/rest");
   var Utils = require('./bot_utils.js');
 
 /*
+    *FUNCTION*
+*/
+
+function Authentication_git() {
+  // basic auth
+  var octokit = new Octokit({  // "octokit" is our Github bot client
+    auth: {
+      username: "KanbanBotDiscord",
+      password: "jesuisunrobot1",
+      async on2fa() {
+        // example: ask the user
+        return prompt("Two-factor authentication Code:");
+      }
+    },
+    userAgent: 'octokit/rest.js v1.2.3',
+    previews: ['jean-grey', 'symmetra'],
+    timeZone: 'Europe/Amsterdam',
+    baseUrl: 'https://api.github.com',
+    log: {
+      debug: () => {},
+      info: () => {},
+      warn: console.warn,
+      error: console.error
+    },
+   });
+    return octokit;
+  }
+
+/*
       *GITHUB BOT INIT*
  */
 
  // Load github info from auth.json
 const Github_info = Utils.GetGithubInfo();
+console.warn(Github_info);
 const Github_username = Github_info[0]
 const Github_password = Github_info[1]
 const Github_repo_username = Github_info[2]
 const Github_repo_name = Github_info[3]
 
-// basic auth
-const octokit = new Octokit({  // "octokit" is our Github bot client
-  auth: {
-    username: Github_username,
-    password: Github_password,
-    async on2fa() {
-      // example: ask the user
-      return prompt("Two-factor authentication Code:");
-    }
-  },
-  userAgent: 'KanbanBot v1.0.0',
-  timeZone: 'Europe/Amsterdam',
-  baseUrl: 'https://api.github.com',
-  log: {
-    debug: () => {},
-    info: () => {},
-    warn: console.warn,
-    error: console.error
-  },
-  request: {
-    agent: undefined,
-    fetch: undefined,
-    timeout: 0
-  },
 
-
- });
- console.log(`Logged in as ${Github_username} (Github)!`);
-
- 
 /*
       *DISCORD BOT INIT*
  */
@@ -78,8 +79,14 @@ bot.on('ready', () => {
   }
 });
 
-  var ListOfIssues = octokit.issues.listForRepo({
-    owner:Github_repo_username,
-    repo:Github_repo_name
-  })
-   console.log(ListOfIssues);
+
+async function Getissues() {
+  const  ListOfIssues  = await octokit.pulls.get({
+    owner: Github_repo_username,
+    repo: Github_repo_name,
+    pull_number: 1
+  });
+}
+
+const octokit = Authentication_git()
+Getissues()
