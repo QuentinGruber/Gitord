@@ -16,6 +16,7 @@ const Github_username = Github_info[0]
 const Github_password = Github_info[1]
 const Github_repo_username = Github_info[2]
 const Github_repo_name = Github_info[3]
+
 // basic auth
 const octokit = new Octokit({  // "octokit" is our Github bot client
   auth: {
@@ -27,7 +28,7 @@ const octokit = new Octokit({  // "octokit" is our Github bot client
     }
   }
  });
- // TODO : console log auth succeed
+ console.log(`Logged in as ${Github_username} (Github)!`);
 
  
 /*
@@ -38,7 +39,7 @@ const octokit = new Octokit({  // "octokit" is our Github bot client
 const bot = new Discord.Client();
 
 bot.on('ready', () => {
-    console.log(`Logged in as ${bot.user.tag}!`);
+    console.log(`Logged in as ${bot.user.tag} (Discord)!`);
   });
   
   // Get bot token from auth.json file
