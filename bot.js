@@ -38,7 +38,6 @@ const Github_token = Github_info[0]
 const Github_repo_username = Github_info[1]
 const Github_repo_name = Github_info[2]
 
-
 /*
       *DISCORD BOT INIT*
  */
@@ -76,8 +75,9 @@ async function Getissues() {
   const  ListOfIssues  = await octokit.pulls.get({
     owner: Github_repo_username,
     repo: Github_repo_name,
-    pull_number: 1
+    pull_number: 2
   });
+  return ListOfIssues;
 }
 catch(e){
   console.log(e);
@@ -85,4 +85,10 @@ catch(e){
 }
 
 const octokit = Authentication_git()
-Getissues()
+
+IssuesList = Getissues()
+
+octokit.paginate(IssuesList)
+    .then(issues => {
+      console.log(issues)
+    })
