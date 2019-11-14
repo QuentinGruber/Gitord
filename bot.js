@@ -6,27 +6,6 @@ const Octokit = require("@octokit/rest");
   // import "Bot_utils.js"
   var Utils = require('./bot_utils.js');
 
-/*
-    *FUNCTION*
-*/
-
-function Authentication_git() {
-  // basic auth
-  var octokit = new Octokit({  // "octokit" is our Github bot client
-    auth: Github_token,
-    userAgent: 'octokit/rest.js v1.2.3',
-    previews: ['jean-grey', 'symmetra'],
-    timeZone: 'Europe/Amsterdam',
-    baseUrl: 'https://api.github.com',
-    log: {
-      debug: () => {},
-      info: () => {},
-      warn: console.warn,
-      error: console.error
-    },
-   });
-    return octokit;
-  }
 
 /*
       *GITHUB BOT INIT*
@@ -54,22 +33,7 @@ bot.on('ready', () => {
 
   bot.login(Token)
 
-
-
-
-
-
-  /* SandBox part */  // TODO : remove this 
-
- // Watch every message's content on the server
- bot.on('message', msg => {
-  // If a msg is "ping"
-  if (msg.content === 'ping') {
-    msg.reply('pong');
-  }
-});
-
-const octokit = Authentication_git()
+const octokit = Utils.Authentication_git(Octokit,Github_token)
 
 IssuesList = Utils.Getissues(octokit,Github_repo_username,Github_repo_name)
 
