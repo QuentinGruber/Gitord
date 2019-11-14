@@ -69,24 +69,7 @@ bot.on('ready', () => {
   }
 });
 
-
-async function Getissues() {
-  try{
-  
-octokit.paginate("GET /repos/:owner/:repo/issues", {
-  owner: Github_repo_username,
-  repo: Github_repo_name
-})
-.then(issues => {
-  console.log(issues)
-});
-}
-catch(e){
-  console.log(e);
-}
-}
-
 const octokit = Authentication_git()
 
-IssuesList = Getissues()
+IssuesList = Utils.Getissues(octokit,Github_repo_username,Github_repo_name)
 
