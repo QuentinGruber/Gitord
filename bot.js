@@ -13,14 +13,7 @@ const Octokit = require("@octokit/rest");
 function Authentication_git() {
   // basic auth
   var octokit = new Octokit({  // "octokit" is our Github bot client
-    auth: {
-      username: "KanbanBotDiscord",
-      password: "jesuisunrobot1",
-      async on2fa() {
-        // example: ask the user
-        return prompt("Two-factor authentication Code:");
-      }
-    },
+    auth: Github_token,
     userAgent: 'octokit/rest.js v1.2.3',
     previews: ['jean-grey', 'symmetra'],
     timeZone: 'Europe/Amsterdam',
@@ -41,11 +34,9 @@ function Authentication_git() {
 
  // Load github info from auth.json
 const Github_info = Utils.GetGithubInfo();
-console.warn(Github_info);
-const Github_username = Github_info[0]
-const Github_password = Github_info[1]
-const Github_repo_username = Github_info[2]
-const Github_repo_name = Github_info[3]
+const Github_token = Github_info[0]
+const Github_repo_username = Github_info[1]
+const Github_repo_name = Github_info[2]
 
 
 /*
@@ -81,11 +72,16 @@ bot.on('ready', () => {
 
 
 async function Getissues() {
+  try{
   const  ListOfIssues  = await octokit.pulls.get({
     owner: Github_repo_username,
     repo: Github_repo_name,
     pull_number: 1
   });
+}
+catch(e){
+  console.log(e);
+}
 }
 
 const octokit = Authentication_git()
