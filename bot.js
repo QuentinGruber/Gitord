@@ -72,12 +72,14 @@ bot.on('ready', () => {
 
 async function Getissues() {
   try{
-  const  ListOfIssues  = await octokit.pulls.get({
-    owner: Github_repo_username,
-    repo: Github_repo_name,
-    pull_number: 2
-  });
-  return ListOfIssues;
+  
+octokit.paginate("GET /repos/:owner/:repo/issues", {
+  owner: Github_repo_username,
+  repo: Github_repo_name
+})
+.then(issues => {
+  console.log(issues)
+});
 }
 catch(e){
   console.log(e);
@@ -88,7 +90,3 @@ const octokit = Authentication_git()
 
 IssuesList = Getissues()
 
-octokit.paginate(IssuesList)
-    .then(issues => {
-      console.log(issues)
-    })
