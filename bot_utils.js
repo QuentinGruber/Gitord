@@ -78,7 +78,8 @@ exports.Updt_issues = async function (octokit) {
     repo: GetGithubRepoInfo("Name")
   })
   .then(issues => {
-    WriteIssueInfo(issues)
+    var util = require("util");
+    WriteIssueInfo(util.inspect(issues))
   });
   }
   catch(e){
@@ -87,7 +88,7 @@ exports.Updt_issues = async function (octokit) {
   }
 
 WriteIssueInfo = function(Data){
-  const fs = require('fs') 
-    fs.writeFile('IssueInfo.txt', Data, (err) => { 
+  const fs = require("fs") 
+    fs.writeFile("IssueInfo.JSON", Data, (err) => { 
     if (err) throw err; })
 }
