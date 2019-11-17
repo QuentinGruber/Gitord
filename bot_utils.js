@@ -71,17 +71,23 @@
 
 
 
-exports.Getissues = async function (octokit) {  // return an array of all issue objects
+exports.Updt_issues = async function (octokit) {  
   try{
     octokit.paginate("GET /repos/:owner/:repo/issues", {
     owner: GetGithubRepoInfo("Owner"),
     repo: GetGithubRepoInfo("Name")
   })
   .then(issues => {
-    return issues;
+    WriteIssueInfo(issues)
   });
   }
   catch(e){
     console.log(e);
   }
   }
+
+WriteIssueInfo = function(Data){
+  const fs = require('fs') 
+    fs.writeFile('IssueInfo.txt', Data, (err) => { 
+    if (err) throw err; })
+}

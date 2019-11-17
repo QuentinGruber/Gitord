@@ -5,10 +5,4 @@ const Discord_bot = Utils.Authentication_Discord()
  
 const octokit = Utils.Authentication_git()
 
-IssuesList = Utils.Getissues(octokit)
-
-setTimeout(function(){
-  IssuesList.then(function(result) {
-    console.log(result) // "Some User token"
-  })
-}, 8000);
+Utils.Updt_issues(octokit)
