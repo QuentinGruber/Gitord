@@ -5,4 +5,4 @@ const Discord_bot = Utils.Authentication_Discord()
  
 const octokit = Utils.Authentication_git()
 
-Utils.Updt_issues(octokit)
+Utils.Updt_issues(octokit) // Update issues's data from github repo

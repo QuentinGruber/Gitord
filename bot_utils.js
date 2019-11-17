@@ -87,10 +87,9 @@ exports.Updt_issues = async function (octokit) {
   }
   }
 
-WriteIssueInfo = function(Data){
+WriteIssueInfo = function(Data){ // write issue data in a JSON file
   const fs = require("fs") 
   const dJSON = require('dirty-json');
-  var util = require("util");
   const Data_json = dJSON.parse(Data)
     fs.writeFile("IssueInfo.JSON", JSON.stringify(Data_json), (err) => { 
     if (err) throw err; })
