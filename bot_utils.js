@@ -71,6 +71,7 @@
 
 exports.Updt_GithubInfo = function (octokit) {
   Updt_issues(octokit);
+  Updt_Project(octokit);
 }
 
 Updt_issues = async function (octokit) {  // Update issues's data from github repo
@@ -86,9 +87,22 @@ Updt_issues = async function (octokit) {  // Update issues's data from github re
   }
   catch(e){
     console.log(e);
-  }
+  }}
 
-  }
+  Updt_Project = async function (octokit) {
+    try{
+      octokit.paginate("GET /projects/columns/:column_id/cards", {
+        column_id: 1,
+        media: "Accept"
+    })
+    .then(issues => {
+      var util = require("util");
+      WriteInfo(util.inspect(issues),"ProjectInfo")
+    });
+    }
+    catch(e){
+      console.log(e);
+    }}
 WriteInfo = function(Data,DataFileName){ // write issue data in a JSON file
   const fs = require("fs") 
   const dJSON = require('dirty-json');
