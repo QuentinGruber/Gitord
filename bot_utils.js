@@ -69,9 +69,12 @@
       return octokit;
     }
 
+exports.Updt_GithubInfo = function (octokit) {
+  Updt_issues(octokit);
+  Updt_pulls(octokit);
+}
 
-
-exports.Updt_issues = async function (octokit) {  
+Updt_issues = async function (octokit) {  // Update issues's data from github repo
   try{
     octokit.paginate("GET /repos/:owner/:repo/issues", {
     owner: GetGithubRepoInfo("Owner"),
@@ -87,7 +90,7 @@ exports.Updt_issues = async function (octokit) {
   }
 
   }
-  exports.Updt_pulls = async function (octokit) {  
+Updt_pulls = async function (octokit) {  // Update pulls's data from github repo
     try{
       octokit.paginate("GET /repos/:owner/:repo/pulls", {
       owner: GetGithubRepoInfo("Owner"),
