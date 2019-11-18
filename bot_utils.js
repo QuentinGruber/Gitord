@@ -79,18 +79,34 @@ exports.Updt_issues = async function (octokit) {
   })
   .then(issues => {
     var util = require("util");
-    WriteIssueInfo(util.inspect(issues))
+    WriteInfo(util.inspect(issues),"issuesInfo")
   });
   }
   catch(e){
     console.log(e);
   }
-  }
 
-WriteIssueInfo = function(Data){ // write issue data in a JSON file
+  }
+  exports.Updt_pulls = async function (octokit) {  
+    try{
+      octokit.paginate("GET /repos/:owner/:repo/pulls", {
+      owner: GetGithubRepoInfo("Owner"),
+      repo: GetGithubRepoInfo("Name")
+    })
+    .then(issues => {
+      var util = require("util");
+      WriteInfo(util.inspect(issues),"pullsInfo")
+    });
+    }
+    catch(e){
+      console.log(e);
+    }
+    }
+
+WriteInfo = function(Data,DataFileName){ // write issue data in a JSON file
   const fs = require("fs") 
   const dJSON = require('dirty-json');
   const Data_json = dJSON.parse(Data)
-    fs.writeFile("IssueInfo.JSON", JSON.stringify(Data_json), (err) => { 
+    fs.writeFile(`${DataFileName}.JSON`, JSON.stringify(Data_json), (err) => { 
     if (err) throw err; })
 }
