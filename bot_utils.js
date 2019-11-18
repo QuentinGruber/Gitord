@@ -56,7 +56,7 @@
     var octokit = new Octokit({  // "octokit" is our Github bot client
       auth: GetGithubToken,
       userAgent: 'octokit/rest.js v1.2.3',
-      previews: ['jean-grey', 'symmetra'],
+      previews: ['jean-grey', 'symmetra','starfox-preview','inertia-preview'],
       timeZone: 'Europe/Amsterdam',
       baseUrl: 'https://api.github.com',
       log: {
