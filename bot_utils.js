@@ -71,7 +71,6 @@
 
 exports.Updt_GithubInfo = function (octokit) {
   Updt_issues(octokit);
-  Updt_pulls(octokit);
 }
 
 Updt_issues = async function (octokit) {  // Update issues's data from github repo
@@ -90,22 +89,6 @@ Updt_issues = async function (octokit) {  // Update issues's data from github re
   }
 
   }
-Updt_pulls = async function (octokit) {  // Update pulls's data from github repo
-    try{
-      octokit.paginate("GET /repos/:owner/:repo/pulls", {
-      owner: GetGithubRepoInfo("Owner"),
-      repo: GetGithubRepoInfo("Name")
-    })
-    .then(issues => {
-      var util = require("util");
-      WriteInfo(util.inspect(issues),"pullsInfo")
-    });
-    }
-    catch(e){
-      console.log(e);
-    }
-    }
-
 WriteInfo = function(Data,DataFileName){ // write issue data in a JSON file
   const fs = require("fs") 
   const dJSON = require('dirty-json');
