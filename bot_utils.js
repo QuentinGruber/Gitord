@@ -56,7 +56,7 @@
     var octokit = new Octokit({  // "octokit" is our Github bot client
       auth: GetGithubToken,
       userAgent: 'octokit/rest.js v1.2.3',
-      previews: ['jean-grey', 'symmetra'],
+      previews: ['jean-grey', 'symmetra','starfox-preview','inertia-preview'],
       timeZone: 'Europe/Amsterdam',
       baseUrl: 'https://api.github.com',
       log: {
@@ -69,10 +69,13 @@
       return octokit;
     }
 
+exports.Updt_GithubInfo = function (octokit) {
+  Updt_issues(octokit);
+  Updt_Project(octokit);
+}
 
 // Read Github Data
-
-exports.Updt_issues = async function (octokit) {  
+Updt_issues = async function (octokit) {  // Update issues's data from github repo
   try{
     octokit.paginate("GET /repos/:owner/:repo/issues", {
     owner: GetGithubRepoInfo("Owner"),
@@ -80,19 +83,32 @@ exports.Updt_issues = async function (octokit) {
   })
   .then(issues => {
     var util = require("util");
-    WriteIssueInfo(util.inspect(issues))
+    WriteInfo(util.inspect(issues),"issuesInfo")
   });
   }
   catch(e){
     console.log(e);
-  }
-  }
+  }}
 
-WriteIssueInfo = function(Data){ // write issue data in a JSON file
+  Updt_Project = async function (octokit) {
+    try{
+      octokit.paginate("GET /projects/columns/:column_id/cards", {
+        column_id: 1,
+        media: "Accept"
+    })
+    .then(issues => {
+      var util = require("util");
+      WriteInfo(util.inspect(issues),"ProjectInfo")
+    });
+    }
+    catch(e){
+      console.log(e);
+    }}
+WriteInfo = function(Data,DataFileName){ // write issue data in a JSON file
   const fs = require("fs") 
   const dJSON = require('dirty-json');
   const Data_json = dJSON.parse(Data)
-    fs.writeFile("IssueInfo.JSON", JSON.stringify(Data_json), (err) => { 
+    fs.writeFile(`${DataFileName}.JSON`, JSON.stringify(Data_json), (err) => { 
     if (err) throw err; })
 }
 
