@@ -108,7 +108,7 @@ WriteInfo = function(Data,DataFileName){ // write issue data in a JSON file
   const fs = require("fs") 
   const dJSON = require('dirty-json');
   const Data_json = dJSON.parse(Data)
-    fs.writeFile(`${DataFileName}.JSON`, JSON.stringify(Data_json), (err) => { 
+    fs.writeFile(`${DataFileName}.json`, JSON.stringify(Data_json), (err) => { 
     if (err) throw err; })
 }
 
