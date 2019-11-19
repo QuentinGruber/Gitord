@@ -142,11 +142,11 @@ GetRules = function () {
 
 exports.Check_error = function() {
   Rules = GetRules()
-  var Error_found
+  var Error_found = []
   if (Rules.IssuesNeedLabel){
     error = Check_IssuesNeedLabel()
     if (error != null){
-    Error_found.append(error)
+    Error_found.push(error)
     }
   }
   if (Rules.IssuesNeedAssignee){
@@ -164,6 +164,7 @@ exports.Check_error = function() {
   if (Rules.PullNeedReviewer){
     console.log("ok")
   }
+  console.log(Error_found)
 }
 
 
@@ -171,7 +172,14 @@ exports.Check_error = function() {
 // Check rules func 
 
 Check_IssuesNeedLabel = function(){
-    Info = GetGithubInfo("issues")
-    console.log(Info)
+    Issues = GetGithubInfo("issues")
+    var error_found = []
+    for (i=0;i<Issues.length;i++){
+    console.log(Issues[i].labels)
+    if (Issues[i].labels.length == 0){
+      error_found.push([Issues[i].title,Issues[i].html_url,Issues[i].user.login])
+    }
+    }
+    return error_found
 
 }
