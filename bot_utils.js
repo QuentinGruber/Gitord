@@ -111,5 +111,22 @@ GetRules = function () {
 
 exports.Check_error = function() {
   Rules = GetRules()
-  console.log(Rules)
+  if (Rules.IssuesNeedLabel){
+    console.log("ok")
+  }
+  if (Rules.IssuesNeedAssignee){
+    console.log("ok")
+  }
+  if (Rules.IssueMinimalBody != 0){
+    console.log("ok")
+  }
+  if (Rules.PullNeedToFix){
+    console.log("ok")
+  }
+  if (Rules.PullNeedAssigneeWIP){
+    console.log("ok")
+  }
+  if (Rules.PullNeedReviewer){
+    console.log("ok")
+  }
 }

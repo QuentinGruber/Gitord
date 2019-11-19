@@ -4,5 +4,5 @@
     "IssueMinimalBody":"150",
     "PullNeedToFix":"true",
     "PullNeedAssigneeWIP":"true",
-    "PullNeedReviewer!WIP":"true"
+    "PullNeedReviewer":"true"
 }
