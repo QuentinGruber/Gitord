@@ -168,6 +168,10 @@ exports.Check_error = function() {
     }
   }
   if (Rules.PullNeedAssigneeWIP){
+    error = Check_PullNeedAssigneeWIP()
+    if (error.length != 0){
+    Error_found.push(error)
+    }
 
   }
   if (Rules.PullNeedReviewer){
@@ -227,14 +231,27 @@ Check_PullNeedToFix = function(){
 
   if (Issues[i].body == null){
     if(Issues[i].pull_request != undefined){
-    error_found.push([Issues[i].title,Issues[i].html_url,Issues[i].user.login,"Pull Request to not Fix/Close any issue1"])
+    error_found.push([Issues[i].title,Issues[i].html_url,Issues[i].user.login,"Pull Request to not Fix/Close any issue"])
     }
   }
   else if (String(Issues[i].body).includes('Close') == false && String(Issues[i].body).includes('Fix') == false && Issues[i].pull_request != undefined){
     console.log(String(Issues[i].body).includes('Close'))
-    error_found.push([Issues[i].title,Issues[i].html_url,Issues[i].user.login,"Pull Request to not Fix/Close any issue2"])
+    error_found.push([Issues[i].title,Issues[i].html_url,Issues[i].user.login,"Pull Request to not Fix/Close any issue"])
     }  
   }
+  return error_found
+
+}
+
+Check_PullNeedAssigneeWIP = function(){
+  Issues = GetGithubInfo("issues")
+  var error_found = []
+  for (i=0;i<Issues.length;i++){
+    if(Issues[i].pull_request != undefined && Issues[i].assignee == null){
+      if (String(Issues[i].title).includes('WIP') ||String(Issues[i].title).includes('Work in progress') || String(Issues[i].title).includes('🚧')){
+        error_found.push([Issues[i].title,Issues[i].html_url,Issues[i].user.login,'Pull Request "WIP" need an asignee'])
+  }
+  }}
   return error_found
 
 }
