@@ -175,7 +175,7 @@ Check_IssuesNeedLabel = function(){
     Issues = GetGithubInfo("issues")
     var error_found = []
     for (i=0;i<Issues.length;i++){
-    if (Issues[i].labels.length == 0){
+    if (Issues[i].labels.length == 0 && Issues[i].pull_request == undefined){
       error_found.push([Issues[i].title,Issues[i].html_url,Issues[i].user.login,"Missing Label!"])
     }
     }
