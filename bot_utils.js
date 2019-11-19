@@ -111,8 +111,12 @@ GetRules = function () {
 
 exports.Check_error = function() {
   Rules = GetRules()
+  var Error_found
   if (Rules.IssuesNeedLabel){
-    console.log("ok")
+    error = Check_IssuesNeedLabel()
+    if (error != null){
+    Error_found.append(error)
+    }
   }
   if (Rules.IssuesNeedAssignee){
     console.log("ok")
@@ -129,4 +133,13 @@ exports.Check_error = function() {
   if (Rules.PullNeedReviewer){
     console.log("ok")
   }
+}
+
+
+
+// Check rules func 
+
+Check_IssuesNeedLabel = function(){
+    
+
 }
