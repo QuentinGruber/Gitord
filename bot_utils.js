@@ -113,6 +113,21 @@ WriteInfo = function(Data,DataFileName){ // write issue data in a JSON file
 }
 
 
+// Get Github info from json
+
+GetGithubInfo = function (Answer) {
+  if(Answer == "issues"){
+    return GetIssueInfo();
+  }
+}
+
+GetIssueInfo = function () {
+  const fs = require('fs');
+    rawdata = fs.readFileSync('issuesInfo.json');
+    var IssuesInfo = JSON.parse(rawdata);
+    return IssuesInfo;
+}
+
 // Get Rules info
 
 GetRules = function () {
@@ -156,6 +171,7 @@ exports.Check_error = function() {
 // Check rules func 
 
 Check_IssuesNeedLabel = function(){
-    
+    Info = GetGithubInfo("issues")
+    console.log(Info)
 
 }
