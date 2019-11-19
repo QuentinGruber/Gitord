@@ -162,7 +162,10 @@ exports.Check_error = function() {
     }
   }
   if (Rules.PullNeedToFix){
-
+    error = Check_PullNeedToFix()
+    if (error.length != 0){
+    Error_found.push(error)
+    }
   }
   if (Rules.PullNeedAssigneeWIP){
 
@@ -211,6 +214,25 @@ Check_IssueMinimalBody = function(Body_size){
   }
   else if (Issues[i].body.length < Body_size && Issues[i].pull_request == undefined){
     error_found.push([Issues[i].title,Issues[i].html_url,Issues[i].user.login,`Body to small!(${Issues[i].body.length}/${Body_size})`])
+    }  
+  }
+  return error_found
+
+}
+
+Check_PullNeedToFix = function(){
+  Issues = GetGithubInfo("issues")
+  var error_found = []
+  for (i=0;i<Issues.length;i++){
+
+  if (Issues[i].body == null){
+    if(Issues[i].pull_request != undefined){
+    error_found.push([Issues[i].title,Issues[i].html_url,Issues[i].user.login,"Pull Request to not Fix/Close any issue1"])
+    }
+  }
+  else if (String(Issues[i].body).includes('Close') == false && String(Issues[i].body).includes('Fix') == false && Issues[i].pull_request != undefined){
+    console.log(String(Issues[i].body).includes('Close'))
+    error_found.push([Issues[i].title,Issues[i].html_url,Issues[i].user.login,"Pull Request to not Fix/Close any issue2"])
     }  
   }
   return error_found
