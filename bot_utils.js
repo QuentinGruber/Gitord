@@ -172,10 +172,6 @@ exports.Check_error = function() {
     if (error.length != 0){
     Error_found.push(error)
     }
-
-  }
-  if (Rules.PullNeedReviewer){
-
   }
   return Error_found
 }
@@ -235,7 +231,6 @@ Check_PullNeedToFix = function(){
     }
   }
   else if (String(Issues[i].body).includes('Close') == false && String(Issues[i].body).includes('Fix') == false && Issues[i].pull_request != undefined){
-    console.log(String(Issues[i].body).includes('Close'))
     error_found.push([Issues[i].title,Issues[i].html_url,Issues[i].user.login,"Pull Request to not Fix/Close any issue"])
     }  
   }
