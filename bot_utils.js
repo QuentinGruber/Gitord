@@ -150,34 +150,33 @@ exports.Check_error = function() {
     }
   }
   if (Rules.IssuesNeedAssignee){
-    console.log("ok")
+
   }
   if (Rules.IssueMinimalBody != 0){
-    console.log("ok")
+
   }
   if (Rules.PullNeedToFix){
-    console.log("ok")
+
   }
   if (Rules.PullNeedAssigneeWIP){
-    console.log("ok")
+
   }
   if (Rules.PullNeedReviewer){
-    console.log("ok")
+
   }
-  console.log(Error_found)
+  return Error_found
 }
 
 
 
 // Check rules func 
-
+// TODO: disable this check for pull request
 Check_IssuesNeedLabel = function(){
     Issues = GetGithubInfo("issues")
     var error_found = []
     for (i=0;i<Issues.length;i++){
-    console.log(Issues[i].labels)
     if (Issues[i].labels.length == 0){
-      error_found.push([Issues[i].title,Issues[i].html_url,Issues[i].user.login])
+      error_found.push([Issues[i].title,Issues[i].html_url,Issues[i].user.login,"Missing Label!"])
     }
     }
     return error_found
