@@ -145,19 +145,19 @@ exports.Check_error = function() {
   var Error_found = []
   if (Rules.IssuesNeedLabel){
     error = Check_IssuesNeedLabel()
-    if (error != null){
+    if (error.length != 0){
     Error_found.push(error)
     }
   }
   if (Rules.IssuesNeedAssignee){
     error = Check_IssuesAssignee()
-    if (error != null){
+    if (error.length != 0){
     Error_found.push(error)
     }
   }
   if (Rules.IssueMinimalBody != 0){
     error = Check_IssueMinimalBody(Rules.IssueMinimalBody)
-    if (error != null){
+    if (error.length != 0){
     Error_found.push(error)
     }
   }
