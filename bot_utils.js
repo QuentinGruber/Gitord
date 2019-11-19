@@ -71,7 +71,7 @@
 
 exports.Updt_GithubInfo = function (octokit) {
   Updt_issues(octokit);
-  Updt_Project(octokit);
+ // Updt_Project(octokit); not working
 }
 
 // Read Github Data
