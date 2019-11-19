@@ -156,7 +156,10 @@ exports.Check_error = function() {
     }
   }
   if (Rules.IssueMinimalBody != 0){
-
+    error = Check_IssueMinimalBody(Rules.IssueMinimalBody)
+    if (error != null){
+    Error_found.push(error)
+    }
   }
   if (Rules.PullNeedToFix){
 
@@ -193,6 +196,22 @@ Check_IssuesAssignee = function(){
   if (Issues[i].assignee == null && Issues[i].pull_request == undefined){
     error_found.push([Issues[i].title,Issues[i].html_url,Issues[i].user.login,"Missing Assignee!"])
   }
+  }
+  return error_found
+
+}
+
+Check_IssueMinimalBody = function(Body_size){
+  Issues = GetGithubInfo("issues")
+  var error_found = []
+  for (i=0;i<Issues.length;i++){
+
+  if (Issues[i].body == null  && Issues[i].pull_request == undefined){
+    error_found.push([Issues[i].title,Issues[i].html_url,Issues[i].user.login,`Body to small!(0/${Body_size})`])
+  }
+  else if (Issues[i].body.length < Body_size && Issues[i].pull_request == undefined){
+    error_found.push([Issues[i].title,Issues[i].html_url,Issues[i].user.login,`Body to small!(${Issues[i].body.length}/${Body_size})`])
+    }  
   }
   return error_found
 
