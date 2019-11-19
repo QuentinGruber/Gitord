@@ -150,7 +150,10 @@ exports.Check_error = function() {
     }
   }
   if (Rules.IssuesNeedAssignee){
-
+    error = Check_IssuesAssignee()
+    if (error != null){
+    Error_found.push(error)
+    }
   }
   if (Rules.IssueMinimalBody != 0){
 
@@ -170,7 +173,7 @@ exports.Check_error = function() {
 
 
 // Check rules func 
-// TODO: disable this check for pull request
+
 Check_IssuesNeedLabel = function(){
     Issues = GetGithubInfo("issues")
     var error_found = []
@@ -180,5 +183,17 @@ Check_IssuesNeedLabel = function(){
     }
     }
     return error_found
+
+}
+
+Check_IssuesAssignee = function(){
+  Issues = GetGithubInfo("issues")
+  var error_found = []
+  for (i=0;i<Issues.length;i++){
+  if (Issues[i].assignee == null && Issues[i].pull_request == undefined){
+    error_found.push([Issues[i].title,Issues[i].html_url,Issues[i].user.login,"Missing Assignee!"])
+  }
+  }
+  return error_found
 
 }
