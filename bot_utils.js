@@ -1,6 +1,6 @@
 
 
-// Extract JSON data
+// Extract Auth JSON data
   GetAuthData = function () {
     const fs = require('fs');
     rawdata = fs.readFileSync('auth.json');
@@ -30,6 +30,7 @@
     }
   };
 
+  // Authentication 
 
   exports.Authentication_Discord = function () {  // return our discord bot instance if connection has succeed
     // init API
@@ -47,7 +48,6 @@
       return bot;
     });
   }
-
 
   exports.Authentication_git = function () { // return our github instance if connection has succeed
     // init API
@@ -70,6 +70,7 @@
     }
 
 
+// Read Github Data
 
 exports.Updt_issues = async function (octokit) {  
   try{
@@ -93,4 +94,22 @@ WriteIssueInfo = function(Data){ // write issue data in a JSON file
   const Data_json = dJSON.parse(Data)
     fs.writeFile("IssueInfo.JSON", JSON.stringify(Data_json), (err) => { 
     if (err) throw err; })
+}
+
+
+// Get Rules info
+
+GetRules = function () {
+  const fs = require('fs');
+  rawdata = fs.readFileSync('Rules.json');
+  var Rules = JSON.parse(rawdata);
+  return Rules;
+}
+
+
+// Apply Rules
+
+exports.Check_error = function() {
+  Rules = GetRules()
+  console.log(Rules)
 }
