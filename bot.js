@@ -1,9 +1,10 @@
 // Import utils
-const Utils = require('./bot_utils.js');
+const G_Utils = require('./bot_utils/bot.G_utils.js');
+const D_Utils = require('./bot_utils/bot.D_utils.js');
 
-const Discord_bot = Utils.Authentication_Discord()
+const Discord_bot = D_Utils.Authentication_Discord()
  
-const octokit = Utils.Authentication_git()
+const octokit = G_Utils.Authentication_git()
 
 
-Errors = Utils.GetError(octokit)
+Errors = G_Utils.GetError(octokit)

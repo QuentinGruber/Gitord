@@ -8,11 +8,6 @@
     return AuthData;
   }
 
-  GetDiscordToken = function () {  // used to get Discord_bot's secret token
-    var AuthData = GetAuthData();
-    return AuthData.token;
-  };
-
   GetGithubToken = function () {  // used to extract all Github's info in Auth.json
     var AuthData = GetAuthData();
     return AuthData.Github_token;
@@ -31,23 +26,6 @@
   };
 
   // Authentication 
-
-  exports.Authentication_Discord = function () {  // return our discord bot instance if connection has succeed
-    // init API
-    const Discord = require('discord.js');
-    // Create bot instance
-    const bot = new Discord.Client();
-
-    // Get bot token from auth.json file
-    Token = GetDiscordToken()
-
-    bot.login(Token)
-
-    bot.on('ready', () => {
-      console.log(`Logged in as ${bot.user.tag} (Discord)!`);
-      return bot;
-    });
-  }
 
   exports.Authentication_git = function () { // return our github instance if connection has succeed
     // init API
@@ -70,6 +48,7 @@
     }
 
 exports.GetError = function (octokit){
+  issues_path = 'Data/issuesInfo.json'
   Updt_GithubInfo(octokit) // Update data from github repo
   waitForDataCollecting()
   function waitForDataCollecting(){
@@ -90,8 +69,7 @@ Updt_GithubInfo = function (octokit) {
 
 IsJsonCreated = function () {
   const fs = require('fs')
-  const path = 'issuesInfo.json'
-  if (fs.existsSync(path)) {
+  if (fs.existsSync(issues_path)) {
       isCollectingData = false
     }
   else{
@@ -108,7 +86,7 @@ Updt_issues = async function (octokit) {  // Update issues's data from github re
   })
   .then(issues => {
     var util = require("util");
-    WriteInfo(util.inspect(issues),"issuesInfo")
+    WriteInfo(util.inspect(issues),issues_path)
     IsJsonCreated()
   });
   }
@@ -130,11 +108,11 @@ Updt_issues = async function (octokit) {  // Update issues's data from github re
     catch(e){
       console.log(e);
     }}
-WriteInfo = function(Data,DataFileName){ // write issue data in a JSON file
+WriteInfo = function(Data,DataPath){ // write issue data in a JSON file
   const fs = require("fs") 
   const dJSON = require('dirty-json');
   const Data_json = dJSON.parse(Data)
-    fs.writeFile(`${DataFileName}.json`, JSON.stringify(Data_json), (err) => { 
+    fs.writeFile(DataPath, JSON.stringify(Data_json), (err) => { 
     if (err) throw err; })
 }
 
@@ -149,7 +127,7 @@ GetGithubInfo = function (Answer) {
 
 GetIssueInfo = function () {
   const fs = require('fs');
-    rawdata = fs.readFileSync('issuesInfo.json');
+    rawdata = fs.readFileSync(issues_path);
     var IssuesInfo = JSON.parse(rawdata);
     return IssuesInfo;
 }
