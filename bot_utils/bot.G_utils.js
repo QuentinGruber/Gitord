@@ -1,6 +1,7 @@
 
 
 // Extract Auth JSON data
+
   GetAuthData = function () {
     const fs = require('fs');
     rawdata = fs.readFileSync('auth.json');
@@ -47,9 +48,10 @@
       return octokit;
     }
 
-exports.GetError = function (octokit){
-  issues_path = 'Data/issuesInfo.json'
+exports.GetError = function (octokit){  // retrieve errors from the github repo
+  issues_path = 'Data/issuesInfo.json' // Json file that contain all "issues" errors
   Updt_GithubInfo(octokit) // Update data from github repo
+  // Wait for github data being write/update 
   waitForDataCollecting()
   function waitForDataCollecting(){
     if (isCollectingData) {
@@ -62,18 +64,18 @@ exports.GetError = function (octokit){
   };
 
 Updt_GithubInfo = function (octokit) {
-  isCollectingData = true
+  isCollectingData = true  // Set isCollectingData flag to true
   Updt_issues(octokit);
  // Updt_Project(octokit); not working
 }
 
 IsJsonCreated = function () {
   const fs = require('fs')
-  if (fs.existsSync(issues_path)) {
-      isCollectingData = false
+  if (fs.existsSync(issues_path)) {  // if the json file exist
+      isCollectingData = false // Set isCollectingData flag to false
     }
   else{
-    IsJsonCreated()
+    IsJsonCreated()  // if not re-check
   }
 }
 
@@ -86,8 +88,8 @@ Updt_issues = async function (octokit) {  // Update issues's data from github re
   })
   .then(issues => {
     var util = require("util");
-    WriteInfo(util.inspect(issues),issues_path)
-    IsJsonCreated()
+    WriteInfo(util.inspect(issues),issues_path) // write issues's data in a json file
+    IsJsonCreated() // Check if the json file has been created
   });
   }
   catch(e){
@@ -145,12 +147,14 @@ GetRules = function () {
 // Apply Rules
 
 Check_error = function() {
-  Rules = GetRules()
-  var Error_found = []
-  if (Rules.IssuesNeedLabel){
-    error = Check_IssuesNeedLabel()
-    if (error.length != 0){
-    Error_found.push(error)
+  Rules = GetRules()  // Get Rules
+  var Error_found = []  // init Error_found array
+
+  if (Rules.IssuesNeedLabel){ // if the following Rules is enable
+    // Check if she's respected
+    error = Check_IssuesNeedLabel() // return an array of all issues that do not follow this rule
+    if (error.length != 0){ // if we found errors about this rule
+    Error_found.push(error) // add them to the Error_found array
     }
   }
   if (Rules.IssuesNeedAssignee){
@@ -177,6 +181,7 @@ Check_error = function() {
     Error_found.push(error)
     }
   }
+  // After checking all rules return an array that contain all errors
   return Error_found
 }
 
@@ -184,73 +189,85 @@ Check_error = function() {
 
 // Check rules func 
 
+/*
+  Errors format : [Issue/pull Title,Issue/pull URL,User that create it,"Error msg"]
+*/
+
 Check_IssuesNeedLabel = function(){
-    Issues = GetGithubInfo("issues")
-    var error_found = []
-    for (i=0;i<Issues.length;i++){
+    Issues = GetGithubInfo("issues") // get issues info
+    var errors_found = [] // init local errors_found array
+    for (i=0;i<Issues.length;i++){ // check all issues/pulls
+      // if has 0 labels and isn't a pull request
     if (Issues[i].labels.length == 0 && Issues[i].pull_request == undefined){
-      error_found.push([Issues[i].title,Issues[i].html_url,Issues[i].user.login,"Missing Label!"])
+      // Add issue to the errors_found array
+      errors_found.push([Issues[i].title,Issues[i].html_url,Issues[i].user.login,"Missing Label!"])
     }
     }
-    return error_found
+    //return errors
+    return errors_found
 
 }
 
 Check_IssuesAssignee = function(){
   Issues = GetGithubInfo("issues")
-  var error_found = []
+  var errors_found = []
   for (i=0;i<Issues.length;i++){
+    // if has no assignee and isn't a pull request
   if (Issues[i].assignee == null && Issues[i].pull_request == undefined){
-    error_found.push([Issues[i].title,Issues[i].html_url,Issues[i].user.login,"Missing Assignee!"])
+    errors_found.push([Issues[i].title,Issues[i].html_url,Issues[i].user.login,"Missing Assignee!"])
   }
   }
-  return error_found
+  return errors_found
 
 }
 
 Check_IssueMinimalBody = function(Body_size){
   Issues = GetGithubInfo("issues")
-  var error_found = []
+  var errors_found = []
   for (i=0;i<Issues.length;i++){
-
   if (Issues[i].body == null  && Issues[i].pull_request == undefined){
-    error_found.push([Issues[i].title,Issues[i].html_url,Issues[i].user.login,`Body to small!(0/${Body_size})`])
+    // if body is null and isn't a pull request
+    errors_found.push([Issues[i].title,Issues[i].html_url,Issues[i].user.login,`Body to small!(0/${Body_size})`])
   }
   else if (Issues[i].body.length < Body_size && Issues[i].pull_request == undefined){
-    error_found.push([Issues[i].title,Issues[i].html_url,Issues[i].user.login,`Body to small!(${Issues[i].body.length}/${Body_size})`])
+      // if issue body is smaller that minimal body size and isn't a pull request
+    errors_found.push([Issues[i].title,Issues[i].html_url,Issues[i].user.login,`Body to small!(${Issues[i].body.length}/${Body_size})`])
     }  
   }
-  return error_found
+  return errors_found
 
 }
 
 Check_PullNeedToFix = function(){
   Issues = GetGithubInfo("issues")
-  var error_found = []
+  var errors_found = []
   for (i=0;i<Issues.length;i++){
 
   if (Issues[i].body == null){
     if(Issues[i].pull_request != undefined){
-    error_found.push([Issues[i].title,Issues[i].html_url,Issues[i].user.login,"Pull Request to not Fix/Close any issue"])
+      // if body is null and is a pull request
+      errors_found.push([Issues[i].title,Issues[i].html_url,Issues[i].user.login,"Pull Request do not Fix/Close any issue"])
     }
   }
-  else if (String(Issues[i].body).includes('Close') == false && String(Issues[i].body).includes('Fix') == false && Issues[i].pull_request != undefined){
-    error_found.push([Issues[i].title,Issues[i].html_url,Issues[i].user.login,"Pull Request to not Fix/Close any issue"])
+  else if (String(Issues[i].body).includes('Close #') == false && String(Issues[i].body).includes('Fix #') == false && Issues[i].pull_request != undefined){
+    // if body doesn't use a keyword to close an issue and is a pull request
+    errors_found.push([Issues[i].title,Issues[i].html_url,Issues[i].user.login,"Pull Request do not Fix/Close any issue"])
     }  
   }
-  return error_found
+  return errors_found
 
 }
 
 Check_PullNeedAssigneeWIP = function(){
   Issues = GetGithubInfo("issues")
-  var error_found = []
+  var errors_found = []
   for (i=0;i<Issues.length;i++){
     if(Issues[i].pull_request != undefined && Issues[i].assignee == null){
       if (String(Issues[i].title).includes('WIP') ||String(Issues[i].title).includes('Work in progress') || String(Issues[i].title).includes('🚧')){
-        error_found.push([Issues[i].title,Issues[i].html_url,Issues[i].user.login,'Pull Request "WIP" need an asignee'])
+        // if is an pull request without assignee that contain a WIP keyword
+        errors_found.push([Issues[i].title,Issues[i].html_url,Issues[i].user.login,'Pull Request "WIP" need an asignee'])
   }
   }}
-  return error_found
+  return errors_found
 
 }

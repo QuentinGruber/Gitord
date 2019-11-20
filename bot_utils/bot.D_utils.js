@@ -24,7 +24,7 @@ exports.Authentication_Discord = function () {  // return our discord bot instan
 
   bot.login(Token)
 
-  bot.on('ready', () => {
+  bot.on('ready', () => {  // is logged in 
     console.log(`Logged in as ${bot.user.tag} (Discord)!`);
     return bot;
   });
