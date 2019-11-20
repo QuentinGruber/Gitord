@@ -69,9 +69,34 @@
       return octokit;
     }
 
-exports.Updt_GithubInfo = function (octokit) {
+exports.GetError = function (octokit){
+  Updt_GithubInfo(octokit) // Update data from github repo
+  waitForDataCollecting()
+  function waitForDataCollecting(){
+    if (isCollectingData) {
+      setTimeout(function(){waitForDataCollecting()},1000);
+      } 
+    else {
+      console.log(Check_error())
+      }
+    }
+  };
+
+Updt_GithubInfo = function (octokit) {
+  isCollectingData = true
   Updt_issues(octokit);
  // Updt_Project(octokit); not working
+}
+
+IsJsonCreated = function () {
+  const fs = require('fs')
+  const path = 'issuesInfo.json'
+  if (fs.existsSync(path)) {
+      isCollectingData = false
+    }
+  else{
+    IsJsonCreated()
+  }
 }
 
 // Read Github Data
@@ -84,6 +109,7 @@ Updt_issues = async function (octokit) {  // Update issues's data from github re
   .then(issues => {
     var util = require("util");
     WriteInfo(util.inspect(issues),"issuesInfo")
+    IsJsonCreated()
   });
   }
   catch(e){
@@ -140,7 +166,7 @@ GetRules = function () {
 
 // Apply Rules
 
-exports.Check_error = function() {
+Check_error = function() {
   Rules = GetRules()
   var Error_found = []
   if (Rules.IssuesNeedLabel){
