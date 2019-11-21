@@ -1,12 +1,15 @@
 // Import utils
-const Utils = require('./bot_utils.js');
+const G_Utils = require('./bot_utils/bot.G_utils.js');
+const D_Utils = require('./bot_utils/bot.D_utils.js');
 
-const Discord_bot = Utils.Authentication_Discord()
- 
-const octokit = Utils.Authentication_git()
+// Auth bots
 
-Utils.Updt_GithubInfo(octokit) // Update data from github repo
+const Discord_bot = D_Utils.Authentication_Discord()
 
-Utils.Check_error()
+function MainLoop(Discord_bot){
+    console.log("ok")
+    G_Utils.GetError(Discord_bot)
 
-console.log(Utils.Check_error())
+}
+
+setInterval(function(){MainLoop()},20000)  // Check & display error every T time
