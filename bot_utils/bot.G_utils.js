@@ -1,5 +1,3 @@
-
-
 // Extract Auth JSON data
 
   GetAuthData = function () {
@@ -28,7 +26,7 @@
 
   // Authentication 
 
-  exports.Authentication_git = function () { // return our github instance if connection has succeed
+  Authentication_git = function () { // return our github instance if connection has succeed
     // init API
     const Octokit = require("@octokit/rest");
     // basic auth
@@ -49,6 +47,7 @@
     }
 
 exports.GetError = function (octokit){  // retrieve errors from the github repo
+  octokit = Authentication_git()
   issues_path = 'Data/issuesInfo.json' // Json file that contain all "issues" errors
   Updt_GithubInfo(octokit) // Update data from github repo
   // Wait for github data being write/update 
@@ -58,7 +57,8 @@ exports.GetError = function (octokit){  // retrieve errors from the github repo
       setTimeout(function(){waitForDataCollecting()},1000);
       } 
     else {
-      console.log(Check_error())
+      const D_Utils = require('./bot.D_utils.js');
+      D_Utils.DisplayError(Check_error())
       }
     }
   };

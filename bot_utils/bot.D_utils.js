@@ -26,6 +26,12 @@ exports.Authentication_Discord = function () {  // return our discord bot instan
 
   bot.on('ready', () => {  // is logged in 
     console.log(`Logged in as ${bot.user.tag} (Discord)!`);
+    bot.channels.get('643496984283578389').send('Bot connected !')
     return bot;
   });
+}
+
+// Send errors message in Discord Channel
+exports.DisplayError = function (trucs){
+  console.log(trucs)
 }

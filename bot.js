@@ -5,8 +5,11 @@ const D_Utils = require('./bot_utils/bot.D_utils.js');
 // Auth bots
 
 const Discord_bot = D_Utils.Authentication_Discord()
- 
-const octokit = G_Utils.Authentication_git()
 
+function MainLoop(Discord_bot){
+    console.log("ok")
+    G_Utils.GetError(Discord_bot)
 
-Errors = G_Utils.GetError(octokit)  // retrieve errors from the github repo
+}
+
+setInterval(function(){MainLoop()},20000)  // Check & display error every T time
