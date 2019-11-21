@@ -4,12 +4,10 @@ const D_Utils = require('./bot_utils/bot.D_utils.js');
 
 // Auth bots
 
-const Discord_bot = D_Utils.Authentication_Discord()
+D_Utils.Authentication_Discord() // launch discord bot
 
-function MainLoop(Discord_bot){
-    console.log("ok")
-    G_Utils.GetError(Discord_bot)
-
+function MainLoop(){
+    G_Utils.GetError()
 }
-
-setInterval(function(){MainLoop()},20000)  // Check & display error every T time
+var TimeBetweenCheck = 60 // in sec
+setInterval(function(){MainLoop()},TimeBetweenCheck*1000)  // Check & display error every T time
