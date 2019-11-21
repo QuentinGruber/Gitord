@@ -17,21 +17,32 @@ exports.Authentication_Discord = function () {  // return our discord bot instan
   // init API
   const Discord = require('discord.js');
   // Create bot instance
-  const bot = new Discord.Client();
+  Discord_bot = new Discord.Client();
 
   // Get bot token from auth.json file
   Token = GetDiscordToken()
 
-  bot.login(Token)
+  Discord_bot.login(Token)
 
-  bot.on('ready', () => {  // is logged in 
-    console.log(`Logged in as ${bot.user.tag} (Discord)!`);
-    bot.channels.get('643496984283578389').send('Bot connected !')
-    return bot;
+  Discord_bot.on('ready', () => {  // is logged in 
+    console.log(`Logged in as ${Discord_bot.user.tag} (Discord)!`);
+    Discord_bot.channels.get('643496984283578389').send('Bot connected !')
   });
 }
 
 // Send errors message in Discord Channel
-exports.DisplayError = function (trucs){
-  console.log(trucs)
+exports.DisplayError = function (errors){
+  console.log(errors)
+  // Create an array of all msg that have to be send
+  var msgList = []
+  for (i=0;i<errors.length;i++){
+    for (j=0;j<errors[i].length;j++){
+      msgList.push("`"+` Error : ${errors[i][j][3]}.`+"`"+ ` "${errors[i][j][0]}" created by *${errors[i][j][2]}* at ${errors[i][j][1]}`)
+    }
+  }
+  // Send all msg
+  for (i=0;i<msgList.length;i++){
+    Discord_bot.channels.get('643496984283578389').send(msgList[i])
+  }
+  Discord_bot.channels.get('643496984283578389').send("**Check done!**")
 }
