@@ -21,6 +21,11 @@ GetChanelId = function () {  // used to get the id of the chanel where the bot w
   return AuthData.Chanel_id;
 };
 
+GetUserList = function () {  // used to get the Discord's @ of users
+  var AuthData = GetAuthData();
+  return AuthData.User_list;
+  };
+
 // Authentication 
 
 exports.Authentication_Discord = function () {  // return our discord bot instance if connection has succeed
@@ -51,9 +56,20 @@ exports.DisplayError = function (errors) {
   console.log(errors)
   // Create an array of all msg that have to be send
   var msgList = []
-  for (i = 0; i < errors.length; i++) {
-    for (j = 0; j < errors[i].length; j++) {
-      msgList.push("`" + ` Error : ${errors[i][j][3]}.` + "`" + ` "${errors[i][j][0]}" created by *${errors[i][j][2]}* at ${errors[i][j][1]}`)
+  var User_list = GetUserList()
+  for (i=0;i<errors.length;i++){
+    for (j=0;j<errors[i].length;j++){
+      User_found = false
+      for(u=0;u<User_list.length;u++){
+        if(User_list[u][0] == errors[i][j][2]){
+          User_found = true
+          var User = "<@"+User_list[u][1]+">"
+          msgList.push("`"+` Error : ${errors[i][j][3]}.`+"`"+ ` "${errors[i][j][0]}" created by ${User} at ${errors[i][j][1]}`)
+        }
+      }
+      if (User_found){
+        msgList.push("`"+` Error : ${errors[i][j][3]}.`+"`"+ ` "${errors[i][j][0]}" created by *${errors[i][j][2]}* at ${errors[i][j][1]}`)
+      }
     }
   }
   // Send all msg
