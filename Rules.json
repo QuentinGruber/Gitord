@@ -1,7 +1,7 @@
 {
-    "IssuesNeedLabel":"true",
-    "IssuesNeedAssignee":"true",
-    "IssueMinimalBody":"150",
-    "PullNeedToFix":"true",
-    "PullNeedAssigneeWIP":"true"
+    "IssuesNeedLabel": "true",
+    "IssuesNeedAssignee": "true",
+    "IssueMinimalBody": "150",
+    "PullNeedToFix": "true",
+    "PullNeedAssigneeWIP": "true"
 }

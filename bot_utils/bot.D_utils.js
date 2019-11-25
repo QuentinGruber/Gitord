@@ -12,8 +12,8 @@ GetDiscordToken = function () {  // used to get Discord_bot's secret token
 };
 
 GetChanelId = function () {  // used to get the id of the chanel where the bot will send msg
-var AuthData = GetAuthData();
-return AuthData.Chanel_id;
+  var AuthData = GetAuthData();
+  return AuthData.Chanel_id;
 };
 
 // Authentication 
@@ -37,17 +37,17 @@ exports.Authentication_Discord = function () {  // return our discord bot instan
 }
 
 // Send errors message in Discord Channel
-exports.DisplayError = function (errors){
+exports.DisplayError = function (errors) {
   console.log(errors)
   // Create an array of all msg that have to be send
   var msgList = []
-  for (i=0;i<errors.length;i++){
-    for (j=0;j<errors[i].length;j++){
-      msgList.push("`"+` Error : ${errors[i][j][3]}.`+"`"+ ` "${errors[i][j][0]}" created by *${errors[i][j][2]}* at ${errors[i][j][1]}`)
+  for (i = 0; i < errors.length; i++) {
+    for (j = 0; j < errors[i].length; j++) {
+      msgList.push("`" + ` Error : ${errors[i][j][3]}.` + "`" + ` "${errors[i][j][0]}" created by *${errors[i][j][2]}* at ${errors[i][j][1]}`)
     }
   }
   // Send all msg
-  for (i=0;i<msgList.length;i++){
+  for (i = 0; i < msgList.length; i++) {
     Discord_bot.channels.get(Chanel_id).send(msgList[i])
   }
   Discord_bot.channels.get(Chanel_id).send("[-- **Check done!** --]")

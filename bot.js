@@ -6,8 +6,8 @@ const D_Utils = require('./bot_utils/bot.D_utils.js');
 
 D_Utils.Authentication_Discord() // launch discord bot
 
-function MainLoop(){
+function MainLoop() {
     G_Utils.GetError()
 }
 var TimeBetweenCheck = 60 // in sec
-setInterval(function(){MainLoop()},TimeBetweenCheck*1000)  // Check & display error every T time
+setInterval(function () { MainLoop() }, TimeBetweenCheck * 1000)  // Check & display error every T time
