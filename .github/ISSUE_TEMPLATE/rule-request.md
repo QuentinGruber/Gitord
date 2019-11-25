@@ -2,7 +2,7 @@
 name: Rule request
 about: Suggest a new rule
 title: ''
-labels: ''
+labels: Rule request
 assignees: ''
 
 ---
