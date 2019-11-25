@@ -11,6 +11,11 @@ GetDiscordToken = function () {  // used to get Discord_bot's secret token
   return AuthData.token;
 };
 
+GetChanelId = function () {  // used to get the id of the chanel where the bot will send msg
+var AuthData = GetAuthData();
+return AuthData.Chanel_id;
+};
+
 // Authentication 
 
 exports.Authentication_Discord = function () {  // return our discord bot instance if connection has succeed
@@ -23,10 +28,11 @@ exports.Authentication_Discord = function () {  // return our discord bot instan
   Token = GetDiscordToken()
 
   Discord_bot.login(Token)
+  Chanel_id = GetChanelId()
 
   Discord_bot.on('ready', () => {  // is logged in 
     console.log(`Logged in as ${Discord_bot.user.tag} (Discord)!`);
-    Discord_bot.channels.get('643496984283578389').send('Bot connected !')
+    Discord_bot.channels.get(Chanel_id).send('Bot connected !')
   });
 }
 
@@ -42,7 +48,7 @@ exports.DisplayError = function (errors){
   }
   // Send all msg
   for (i=0;i<msgList.length;i++){
-    Discord_bot.channels.get('643496984283578389').send(msgList[i])
+    Discord_bot.channels.get(Chanel_id).send(msgList[i])
   }
-  Discord_bot.channels.get('643496984283578389').send("**Check done!**")
+  Discord_bot.channels.get(Chanel_id).send("[-- **Check done!** --]")
 }
