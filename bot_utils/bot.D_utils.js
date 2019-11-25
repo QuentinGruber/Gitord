@@ -8,7 +8,7 @@ GetAuthData = function () {
 
 GetDiscordToken = function () {  // used to get Discord_bot's secret token
   var AuthData = GetAuthData();
-  return AuthData.token;
+  return AuthData.Discord_token;
 };
 
 GetChanelId = function () {  // used to get the id of the chanel where the bot will send msg
