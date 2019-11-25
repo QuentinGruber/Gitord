@@ -2,6 +2,9 @@
 
 ## Description
 
+Gitord is a free and open-source "bot template" that warn you in a Discord Chanel of your choice if your github repo do not follow the rules that you apply.
+
+![Gitord exemple](https://i.ibb.co/rbwQMjh/gitord-exemple.png)
 
 ## Installation 
 [Check Gitord's wiki ](https://github.com/QuentinGruber/Gitord)
