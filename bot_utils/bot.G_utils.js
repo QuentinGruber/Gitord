@@ -49,6 +49,13 @@ Authentication_git = function () { // return our github instance if connection h
 exports.GetError = function (octokit) {  // retrieve errors from the github repo
   octokit = Authentication_git()
   issues_path = 'Data/issuesInfo.json' // Json file that contain all "issues" errors
+  // check if Data folder exist
+  var fs = require('fs');
+  var dir = './Data';
+  if (!fs.existsSync(dir)) {
+    // if not create it
+    fs.mkdirSync(dir);
+  }
   Updt_GithubInfo(octokit) // Update data from github repo
   // Wait for github data being write/update 
   waitForDataCollecting()
