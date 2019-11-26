@@ -30,6 +30,7 @@ To get the ID of a chanel you have to switch your Discord to developer mode.
 
 ## Usage
 
+Check `config.json` to change some default setting such as the Refresh Time
 `rules.json` is where you inform which rule your github repo has to follow.
 
 More info about the available rules [here](https://github.com/QuentinGruber/Gitord/wiki/Rules-info).
