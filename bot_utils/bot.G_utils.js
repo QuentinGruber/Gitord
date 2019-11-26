@@ -2,7 +2,12 @@
 
 GetAuthData = function () {
   const fs = require('fs');
+  try{
   rawdata = fs.readFileSync('auth.json');
+  }
+  catch(e){
+    throw new Error("auth.json has been deleted!");
+  }
   var AuthData = JSON.parse(rawdata);
   return AuthData;
 }

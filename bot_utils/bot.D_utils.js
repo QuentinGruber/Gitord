@@ -1,7 +1,12 @@
 // Extract Auth JSON data
 GetAuthData = function () {
   const fs = require('fs');
+  try{
   rawdata = fs.readFileSync('auth.json');
+  }
+  catch(e){
+    throw new Error("auth.json has been deleted!");
+  }
   var AuthData = JSON.parse(rawdata);
   return AuthData;
 }
@@ -32,7 +37,12 @@ exports.Authentication_Discord = function () {  // return our discord bot instan
 
   Discord_bot.on('ready', () => {  // is logged in 
     console.log(`Logged in as ${Discord_bot.user.tag} (Discord)!`);
+    try{
     Discord_bot.channels.get(Chanel_id).send('Bot connected !')
+    }
+    catch(e){
+      throw new Error("Wrong chanel id ! Fill it in auth.json");
+    }
   });
 }
 
