@@ -2,10 +2,10 @@
 
 GetAuthData = function () {
   const fs = require('fs');
-  try{
-  rawdata = fs.readFileSync('auth.json');
+  try {
+    rawdata = fs.readFileSync('auth.json');
   }
-  catch(e){
+  catch (e) {
     throw new Error("auth.json has been deleted!");
   }
   var AuthData = JSON.parse(rawdata);
@@ -145,7 +145,12 @@ GetGithubInfo = function (Answer) {
 GetIssueInfo = function () {
   const fs = require('fs');
   rawdata = fs.readFileSync(issues_path);
-  var IssuesInfo = JSON.parse(rawdata);
+  try {
+    var IssuesInfo = JSON.parse(rawdata);
+  }
+  catch (e) {
+    console.warn("Error while reading json file! Due to force closing of the script. Error will not be displayed! (this error resolves itself, next tick it will work)")
+  }
   return IssuesInfo;
 }
 
@@ -211,11 +216,13 @@ Check_error = function () {
 Check_IssuesNeedLabel = function () {
   Issues = GetGithubInfo("issues") // get issues info
   var errors_found = [] // init local errors_found array
-  for (i = 0; i < Issues.length; i++) { // check all issues/pulls
-    // if has 0 labels and isn't a pull request
-    if (Issues[i].labels.length == 0 && Issues[i].pull_request == undefined) {
-      // Add issue to the errors_found array
-      errors_found.push([Issues[i].title, Issues[i].html_url, Issues[i].user.login, "Missing Label!"])
+  if (Issues != undefined) {
+    for (i = 0; i < Issues.length; i++) { // check all issues/pulls
+      // if has 0 labels and isn't a pull request
+      if (Issues[i].labels.length == 0 && Issues[i].pull_request == undefined) {
+        // Add issue to the errors_found array
+        errors_found.push([Issues[i].title, Issues[i].html_url, Issues[i].user.login, "Missing Label!"])
+      }
     }
   }
   //return errors
@@ -226,10 +233,12 @@ Check_IssuesNeedLabel = function () {
 Check_IssuesAssignee = function () {
   Issues = GetGithubInfo("issues")
   var errors_found = []
-  for (i = 0; i < Issues.length; i++) {
-    // if has no assignee and isn't a pull request
-    if (Issues[i].assignee == null && Issues[i].pull_request == undefined) {
-      errors_found.push([Issues[i].title, Issues[i].html_url, Issues[i].user.login, "Missing Assignee!"])
+  if (Issues != undefined) {
+    for (i = 0; i < Issues.length; i++) {
+      // if has no assignee and isn't a pull request
+      if (Issues[i].assignee == null && Issues[i].pull_request == undefined) {
+        errors_found.push([Issues[i].title, Issues[i].html_url, Issues[i].user.login, "Missing Assignee!"])
+      }
     }
   }
   return errors_found
@@ -239,14 +248,16 @@ Check_IssuesAssignee = function () {
 Check_IssueMinimalBody = function (Body_size) {
   Issues = GetGithubInfo("issues")
   var errors_found = []
-  for (i = 0; i < Issues.length; i++) {
-    if (Issues[i].body == null && Issues[i].pull_request == undefined) {
-      // if body is null and isn't a pull request
-      errors_found.push([Issues[i].title, Issues[i].html_url, Issues[i].user.login, `Body to small!(0/${Body_size})`])
-    }
-    else if (Issues[i].body.length < Body_size && Issues[i].pull_request == undefined) {
-      // if issue body is smaller that minimal body size and isn't a pull request
-      errors_found.push([Issues[i].title, Issues[i].html_url, Issues[i].user.login, `Body to small!(${Issues[i].body.length}/${Body_size})`])
+  if (Issues != undefined) {
+    for (i = 0; i < Issues.length; i++) {
+      if (Issues[i].body == null && Issues[i].pull_request == undefined) {
+        // if body is null and isn't a pull request
+        errors_found.push([Issues[i].title, Issues[i].html_url, Issues[i].user.login, `Body to small!(0/${Body_size})`])
+      }
+      else if (Issues[i].body.length < Body_size && Issues[i].pull_request == undefined) {
+        // if issue body is smaller that minimal body size and isn't a pull request
+        errors_found.push([Issues[i].title, Issues[i].html_url, Issues[i].user.login, `Body to small!(${Issues[i].body.length}/${Body_size})`])
+      }
     }
   }
   return errors_found
@@ -256,17 +267,19 @@ Check_IssueMinimalBody = function (Body_size) {
 Check_PullNeedToFix = function () {
   Issues = GetGithubInfo("issues")
   var errors_found = []
-  for (i = 0; i < Issues.length; i++) {
+  if (Issues != undefined) {
+    for (i = 0; i < Issues.length; i++) {
 
-    if (Issues[i].body == null) {
-      if (Issues[i].pull_request != undefined) {
-        // if body is null and is a pull request
+      if (Issues[i].body == null) {
+        if (Issues[i].pull_request != undefined) {
+          // if body is null and is a pull request
+          errors_found.push([Issues[i].title, Issues[i].html_url, Issues[i].user.login, "Pull Request do not Fix/Close any issue"])
+        }
+      }
+      else if (String(Issues[i].body).includes('Close #') == false && String(Issues[i].body).includes('Fix #') == false && Issues[i].pull_request != undefined) {
+        // if body doesn't use a keyword to close an issue and is a pull request
         errors_found.push([Issues[i].title, Issues[i].html_url, Issues[i].user.login, "Pull Request do not Fix/Close any issue"])
       }
-    }
-    else if (String(Issues[i].body).includes('Close #') == false && String(Issues[i].body).includes('Fix #') == false && Issues[i].pull_request != undefined) {
-      // if body doesn't use a keyword to close an issue and is a pull request
-      errors_found.push([Issues[i].title, Issues[i].html_url, Issues[i].user.login, "Pull Request do not Fix/Close any issue"])
     }
   }
   return errors_found
@@ -276,11 +289,13 @@ Check_PullNeedToFix = function () {
 Check_PullNeedAssigneeWIP = function () {
   Issues = GetGithubInfo("issues")
   var errors_found = []
-  for (i = 0; i < Issues.length; i++) {
-    if (Issues[i].pull_request != undefined && Issues[i].assignee == null) {
-      if (String(Issues[i].title).includes('WIP') || String(Issues[i].title).includes('Work in progress') || String(Issues[i].title).includes('🚧')) {
-        // if is an pull request without assignee that contain a WIP keyword
-        errors_found.push([Issues[i].title, Issues[i].html_url, Issues[i].user.login, 'Pull Request "WIP" need an asignee'])
+  if (Issues != undefined) {
+    for (i = 0; i < Issues.length; i++) {
+      if (Issues[i].pull_request != undefined && Issues[i].assignee == null) {
+        if (String(Issues[i].title).includes('WIP') || String(Issues[i].title).includes('Work in progress') || String(Issues[i].title).includes('🚧')) {
+          // if is an pull request without assignee that contain a WIP keyword
+          errors_found.push([Issues[i].title, Issues[i].html_url, Issues[i].user.login, 'Pull Request "WIP" need an asignee'])
+        }
       }
     }
   }
