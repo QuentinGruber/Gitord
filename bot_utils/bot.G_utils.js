@@ -149,7 +149,7 @@ GetIssueInfo = function () {
     var IssuesInfo = JSON.parse(rawdata);
   }
   catch (e) {
-    console.warn("Error while reading json file! Due to force closing of the script. Error will not be displayed! (this error resolves itself, next tick it will work)")
+    console.warn("Error while reading json file! Errors will not be displayed! (this error resolves itself, next tick it will work)")
   }
   return IssuesInfo;
 }
