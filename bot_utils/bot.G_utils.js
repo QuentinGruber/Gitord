@@ -1,3 +1,9 @@
+/*
+BSD 3-Clause License
+Copyright (c) 2019, Quentin Gruber
+All rights reserved.
+*/
+
 // Extract Auth JSON data
 
 GetAuthData = function () {
