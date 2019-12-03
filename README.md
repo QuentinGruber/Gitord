@@ -7,7 +7,7 @@ Gitord is a free and open-source "bot template" that alerts you in the Discord C
 ![Gitord exemple](https://i.ibb.co/rbwQMjh/gitord-exemple.png)
 
 ## Installation 
-[Check Gitord's wiki ](https://github.com/QuentinGruber/Gitord)
+[Check Gitord's wiki ](https://github.com/QuentinGruber/Gitord/wiki)
 
 `auth.json` is where you inform the following parameter : 
 
