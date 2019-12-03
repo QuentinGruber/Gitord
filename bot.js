@@ -1,3 +1,11 @@
+/*
+BSD 3-Clause License
+
+Copyright (c) 2019, Quentin Gruber
+All rights reserved.
+*/
+
+
 // Import utils
 const G_Utils = require('./bot_utils/bot.G_utils.js');
 const D_Utils = require('./bot_utils/bot.D_utils.js');
