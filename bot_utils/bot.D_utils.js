@@ -5,16 +5,10 @@ All rights reserved.
 */
 
 // Extract Auth JSON data
+var Sjs = require('@quentingruber/simple-json');
+
 GetAuthData = function () {
-  const fs = require('fs');
-  try{
-  rawdata = fs.readFileSync('auth.json');
-  }
-  catch(e){
-    throw new Error("auth.json has been deleted!");
-  }
-  var AuthData = JSON.parse(rawdata);
-  return AuthData;
+  return Sjs.extract("auth.json");
 }
 
 GetDiscordToken = function () {  // used to get Discord_bot's secret token

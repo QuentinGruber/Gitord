@@ -1,0 +1,30 @@
+{
+  "name": "gitord",
+  "version": "0.1.1",
+  "description": "d",
+  "main": "bot.js",
+  "dependencies": {
+    "dirty-json": "^0.7.1",
+    "discord.js": "^11.5.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "bot.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/QuentinGruber/Gitord.git"
+  },
+  "keywords": [
+    "Git",
+    "Discord",
+    "Kanban"
+  ],
+  "author": "QuentinGruber",
+  "license": "SEE LICENSE IN LICENSE",
+  "bugs": {
+    "url": "https://github.com/QuentinGruber/Gitord/issues"
+  },
+  "homepage": "https://github.com/QuentinGruber/Gitord#readme"
+}
