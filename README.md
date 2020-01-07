@@ -13,7 +13,7 @@ Gitord is a free and open-source "bot template" that alerts you in the Discord C
 
 **[--All parameters must be filled in for Gitord to work!--]**
 * 'Discord_token'
-* 'Github_token'
+* 'Github_token' *by leaving "anon" as a parameter of github_token you can use Gitord anonymously, only for public directories and with an API rate limit*
 * 'Github_Repo_owner'
 * 'Github_Repo_name'
 
