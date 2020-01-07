@@ -67,7 +67,7 @@ exports.DisplayError = function (errors) {
           msgList.push("`"+` Error : ${errors[i][j][3]}.`+"`"+ ` "${errors[i][j][0]}" created by ${User} at ${errors[i][j][1]}`)
         }
       }
-      if (User_found){
+      if (!User_found){
         msgList.push("`"+` Error : ${errors[i][j][3]}.`+"`"+ ` "${errors[i][j][0]}" created by *${errors[i][j][2]}* at ${errors[i][j][1]}`)
       }
     }
