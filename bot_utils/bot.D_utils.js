@@ -63,7 +63,7 @@ exports.DisplayError = function (errors) {
       for(u=0;u<User_list.length;u++){
         if(User_list[u][0] == errors[i][j][2]){
           User_found = true
-          var User = "<@"+User_list[u][1]+">"
+          var User = "<@!"+User_list[u][1]+">"
           msgList.push("`"+` Error : ${errors[i][j][3]}.`+"`"+ ` "${errors[i][j][0]}" created by ${User} at ${errors[i][j][1]}`)
         }
       }
