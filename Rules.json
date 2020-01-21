@@ -1,7 +1,8 @@
 {
     "IssuesNeedLabel": "true",
     "IssuesNeedAssignee": "true",
-    "IssueMinimalBody": "150",
+    "IssueMinimalBody": "20",
     "PullNeedToFix": "true",
-    "PullNeedAssigneeWIP": "true"
+    "PullNeedAssigneeWIP": "true",
+    "AssignedIssueNeedMstone":"true"
 }
