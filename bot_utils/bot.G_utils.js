@@ -185,14 +185,14 @@ Authentication_git = function () { // return our github instance if connection h
     Rules = GetRules()  // Get Rules
     var Error_found = []  // init Error_found array
 
-    if (Rules.IssuesNeedLabel) { // if the following Rules is enable
+    if (Rules.IssuesNeedLabel == "true") { // if the following Rules is enable
       // Check if she's respected
       error = Check_IssuesNeedLabel() // return an array of all issues that do not follow this rule
       if (error.length != 0) { // if we found errors about this rule
         Error_found.push(error) // add them to the Error_found array
       }
     }
-    if (Rules.IssuesNeedAssignee) {
+    if (Rules.IssuesNeedAssignee == "true") {
       error = Check_IssuesAssignee()
       if (error.length != 0) {
         Error_found.push(error)
@@ -204,19 +204,19 @@ Authentication_git = function () { // return our github instance if connection h
         Error_found.push(error)
       }
     }
-    if (Rules.PullNeedToFix) {
+    if (Rules.PullNeedToFix == "true") {
       error = Check_PullNeedToFix()
       if (error.length != 0) {
         Error_found.push(error)
       }
     }
-    if (Rules.PullNeedAssigneeWIP) {
+    if (Rules.PullNeedAssigneeWIP == "true") {
       error = Check_PullNeedAssigneeWIP()
       if (error.length != 0) {
         Error_found.push(error)
       }
     }
-    if (Rules.AssignedIssueNeedMstone) {
+    if (Rules.AssignedIssueNeedMstone == "true") {
       error = Check_AssignedIssueNeedMstone()
       if (error.length != 0) {
         Error_found.push(error)
