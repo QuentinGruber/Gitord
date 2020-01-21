@@ -76,5 +76,5 @@ exports.DisplayError = function (errors) {
   for (i = 0; i < msgList.length; i++) {
     Discord_bot.channels.get(Chanel_id).send(msgList[i])
   }
-  Discord_bot.channels.get(Chanel_id).send("[-- **Check done!** --]")
+  //Discord_bot.channels.get(Chanel_id).send("[-- **Check done!** --]")
 }
