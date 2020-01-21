@@ -216,6 +216,12 @@ Authentication_git = function () { // return our github instance if connection h
         Error_found.push(error)
       }
     }
+    if (Rules.AssignedIssueNeedMstone) {
+      error = Check_AssignedIssueNeedMstone()
+      if (error.length != 0) {
+        Error_found.push(error)
+      }
+    }
     // After checking all rules return an array that contain all errors
     return Error_found
   }
@@ -317,3 +323,19 @@ Authentication_git = function () { // return our github instance if connection h
     return errors_found
 
   }
+
+  Check_AssignedIssueNeedMstone = function () {
+    Issues = GetGithubInfo("issues")
+    var errors_found = []
+    if (Issues != undefined) {
+      for (i = 0; i < Issues.length; i++) {
+        if (Issues[i].assignee != null && Issues[i].pull_request == undefined && Issues[i].milestone == null) {
+            errors_found.push([Issues[i].title, Issues[i].html_url, Issues[i].user.login, 'Assigned issue need a Milestone'])
+        }
+      }
+    }
+    return errors_found
+
+  }
+
+  
