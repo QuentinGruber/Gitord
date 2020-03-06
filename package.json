@@ -6,7 +6,7 @@
   "dependencies": {
     "@octokit/rest": "^16.36.0",
     "@quentingruber/simple-json": "^1.0.1",
-    "dirty-json": "^0.7.1",
+    "dirty-json": "0.8.0",
     "discord.js": "^11.5.1"
   },
   "devDependencies": {},
