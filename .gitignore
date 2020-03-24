@@ -1,5 +1,6 @@
-
+node_modules/
 Data/
 auth.json
 Rules.json
 config.json
+package-lock.json
