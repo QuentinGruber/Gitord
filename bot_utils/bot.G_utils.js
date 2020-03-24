@@ -1,6 +1,6 @@
 /*
 BSD 3-Clause License
-Copyright (c) 2019, Quentin Gruber
+Copyright (c) 2020, Quentin Gruber
 All rights reserved.
 */
 
@@ -66,108 +66,17 @@ Authentication_git = function () { // return our github instance if connection h
   }
 }
 
-  exports.GetError = function (octokit) {  // retrieve errors from the github repo
-    octokit = Authentication_git()
-    issues_path = 'Data/issuesInfo.json' // Json file that contain all "issues" errors
-    // check if Data folder exist
-    var fs = require('fs');
-    var dir = './Data';
-    if (!fs.existsSync(dir)) {
-      // if not create it
-      fs.mkdirSync(dir);
-    }
-    Updt_GithubInfo(octokit) // Update data from github repo
-    // Wait for github data being write/update 
-    waitForDataCollecting()
-    function waitForDataCollecting() {
-      if (isCollectingData) {
-        setTimeout(function () { waitForDataCollecting() }, 1000);
-      }
-      else {
-        const D_Utils = require('./bot.D_utils.js');
-        D_Utils.DisplayError(Check_error())
-      }
-    }
+  exports.GetError = async function () {  // retrieve errors from the github repo
+    var octokit = Authentication_git()
+    let data = await octokit.paginate("GET /repos/:owner/:repo/issues", {
+      owner: GetGithubRepoInfo("Owner"),
+      repo: GetGithubRepoInfo("Name")
+    }) // Update data from github repo
+    // send errors to the discord bot
+    const D_Utils = require('./bot.D_utils.js');
+    D_Utils.DisplayError(Check_error(data))
   };
 
-  Updt_GithubInfo = function (octokit) {
-    isCollectingData = true  // Set isCollectingData flag to true
-    Updt_issues(octokit);
-    // Updt_Project(octokit); not working
-  }
-
-  IsJsonCreated = function () {
-    const fs = require('fs')
-    if (fs.existsSync(issues_path)) {  // if the json file exist
-      isCollectingData = false // Set isCollectingData flag to false
-    }
-    else {
-      IsJsonCreated()  // if not re-check
-    }
-  }
-
-  // Read Github Data
-  Updt_issues = async function (octokit) {  // Update issues's data from github repo
-    try {
-      octokit.paginate("GET /repos/:owner/:repo/issues", {
-        owner: GetGithubRepoInfo("Owner"),
-        repo: GetGithubRepoInfo("Name")
-      })
-        .then(issues => {
-          var util = require("util");
-          WriteInfo(util.inspect(issues), issues_path) // write issues's data in a json file
-          IsJsonCreated() // Check if the json file has been created
-        });
-    }
-    catch (e) {
-      console.log(e);
-    }
-  }
-
-  Updt_Project = async function (octokit) {
-    try {
-      octokit.paginate("GET /projects/columns/:column_id/cards", {
-        column_id: 1,
-        media: "Accept"
-      })
-        .then(issues => {
-          var util = require("util");
-          WriteInfo(util.inspect(issues), "ProjectInfo")
-        });
-    }
-    catch (e) {
-      console.log(e);
-    }
-  }
-  WriteInfo = function (Data, DataPath) { // write issue data in a JSON file
-    const fs = require("fs")
-    const dJSON = require('dirty-json');
-    const Data_json = dJSON.parse(Data)
-    fs.writeFile(DataPath, JSON.stringify(Data_json), (err) => {
-      if (err) throw err;
-    })
-  }
-
-
-  // Get Github info from json
-
-  GetGithubInfo = function (Answer) {
-    if (Answer == "issues") {
-      return GetIssueInfo();
-    }
-  }
-
-  GetIssueInfo = function () {
-    const fs = require('fs');
-    rawdata = fs.readFileSync(issues_path);
-    try {
-      var IssuesInfo = JSON.parse(rawdata);
-    }
-    catch (e) {
-      console.warn("Error while reading json file! Errors will not be displayed! (this error resolves itself, next tick it will work)")
-    }
-    return IssuesInfo;
-  }
 
   // Get Rules info
 
@@ -181,43 +90,43 @@ Authentication_git = function () { // return our github instance if connection h
 
   // Apply Rules
 
-  Check_error = function () {
+  Check_error = function (data) {
     Rules = GetRules()  // Get Rules
     var Error_found = []  // init Error_found array
 
     if (Rules.IssuesNeedLabel == "true") { // if the following Rules is enable
       // Check if she's respected
-      error = Check_IssuesNeedLabel() // return an array of all issues that do not follow this rule
+      error = Check_IssuesNeedLabel(data) // return an array of all issues that do not follow this rule
       if (error.length != 0) { // if we found errors about this rule
         Error_found.push(error) // add them to the Error_found array
       }
     }
     if (Rules.IssuesNeedAssignee == "true") {
-      error = Check_IssuesAssignee()
+      error = Check_IssuesAssignee(data)
       if (error.length != 0) {
         Error_found.push(error)
       }
     }
     if (Rules.IssueMinimalBody != 0) {
-      error = Check_IssueMinimalBody(Rules.IssueMinimalBody)
+      error = Check_IssueMinimalBody(data,Rules.IssueMinimalBody)
       if (error.length != 0) {
         Error_found.push(error)
       }
     }
     if (Rules.PullNeedToFix == "true") {
-      error = Check_PullNeedToFix()
+      error = Check_PullNeedToFix(data)
       if (error.length != 0) {
         Error_found.push(error)
       }
     }
     if (Rules.PullNeedAssigneeWIP == "true") {
-      error = Check_PullNeedAssigneeWIP()
+      error = Check_PullNeedAssigneeWIP(data)
       if (error.length != 0) {
         Error_found.push(error)
       }
     }
     if (Rules.AssignedIssueNeedMstone == "true") {
-      error = Check_AssignedIssueNeedMstone()
+      error = Check_AssignedIssueNeedMstone(data)
       if (error.length != 0) {
         Error_found.push(error)
       }
@@ -234,8 +143,8 @@ Authentication_git = function () { // return our github instance if connection h
     Errors format : [Issue/pull Title,Issue/pull URL,User that create it,"Error msg"]
   */
 
-  Check_IssuesNeedLabel = function () {
-    Issues = GetGithubInfo("issues") // get issues info
+  Check_IssuesNeedLabel = function (data) {
+    Issues = data // get issues info
     var errors_found = [] // init local errors_found array
     if (Issues != undefined) {
       for (i = 0; i < Issues.length; i++) { // check all issues/pulls
@@ -251,8 +160,8 @@ Authentication_git = function () { // return our github instance if connection h
 
   }
 
-  Check_IssuesAssignee = function () {
-    Issues = GetGithubInfo("issues")
+  Check_IssuesAssignee = function (data) {
+    Issues = data
     var errors_found = []
     if (Issues != undefined) {
       for (i = 0; i < Issues.length; i++) {
@@ -266,8 +175,8 @@ Authentication_git = function () { // return our github instance if connection h
 
   }
 
-  Check_IssueMinimalBody = function (Body_size) {
-    Issues = GetGithubInfo("issues")
+  Check_IssueMinimalBody = function (data,Body_size) {
+    Issues = data
     var errors_found = []
     if (Issues != undefined) {
       for (i = 0; i < Issues.length; i++) {
@@ -285,8 +194,8 @@ Authentication_git = function () { // return our github instance if connection h
 
   }
 
-  Check_PullNeedToFix = function () {
-    Issues = GetGithubInfo("issues")
+  Check_PullNeedToFix = function (data) {
+    Issues = data
     var errors_found = []
     if (Issues != undefined) {
       for (i = 0; i < Issues.length; i++) {
@@ -307,8 +216,8 @@ Authentication_git = function () { // return our github instance if connection h
 
   }
 
-  Check_PullNeedAssigneeWIP = function () {
-    Issues = GetGithubInfo("issues")
+  Check_PullNeedAssigneeWIP = function (data) {
+    Issues = data
     var errors_found = []
     if (Issues != undefined) {
       for (i = 0; i < Issues.length; i++) {
@@ -324,8 +233,8 @@ Authentication_git = function () { // return our github instance if connection h
 
   }
 
-  Check_AssignedIssueNeedMstone = function () {
-    Issues = GetGithubInfo("issues")
+  Check_AssignedIssueNeedMstone = function (data) {
+    Issues = data
     var errors_found = []
     if (Issues != undefined) {
       for (i = 0; i < Issues.length; i++) {
