@@ -1,3 +1,5 @@
 {
-    "RefreshTime": 60
+    "RefreshTime": 60,
+    "WorkHours":[],
+    "WorkDays":[]
 }
