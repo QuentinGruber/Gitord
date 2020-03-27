@@ -35,7 +35,7 @@ To get the ID of a channel you have to switch your Discord to developer mode.
 
 ## Usage
 
-Check `config.json` to change some default setting such as the Refresh Time
+Check `config.json` to change some default setting such as the Refresh Time, more info [here](https://github.com/QuentinGruber/Gitord/wiki/Config.json)
 
 `rules.json` is where you inform which rule your GitHub repo has to follow.
 
