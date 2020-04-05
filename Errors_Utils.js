@@ -7,20 +7,10 @@ All rights reserved.
 // Extract Auth JSON data
 var Sjs = require('@quentingruber/simple-json');
 
-// Get Rules info
-
-GetRules = function () {
-  const fs = require('fs');
-  rawdata = fs.readFileSync('Rules.json');
-  var Rules = JSON.parse(rawdata);
-  return Rules;
-}
-
-
 // Apply Rules
 
 exports.Check_error = function (data) {
-  Rules = GetRules()  // Get Rules
+  var Rules = Sjs.extract('Rules.json')  // Get Rules
   var Error_found = []  // init Error_found array
 
   if (Rules.IssuesNeedLabel == "true") { // if the following Rules is enable
