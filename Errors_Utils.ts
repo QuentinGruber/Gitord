@@ -7,96 +7,15 @@ All rights reserved.
 // Extract Auth JSON data
 var Sjs = require('@quentingruber/simple-json');
 
-GetAuthData = function () {
-  return Sjs.extract("auth.json");
-}
-
-GetGithubToken = function () {  // used to extract all Github's info in Auth.json
-  var AuthData = GetAuthData();
-  return AuthData.Github_token;
-};
-GetGithubRepoInfo = function (Asked) {  // used to extract all Github's info in Auth.json
-  var AuthData = GetAuthData();
-  if (Asked == "Owner") {
-    return AuthData.Github_Repo_owner;
-  }
-  else if (Asked == "Name") {
-    return AuthData.Github_Repo_name;
-  }
-  else {
-    Console.error("GetGithubRepoInfo() doesn't provide an valid Asked value! [Owner/Name]")
-  }
-};
-
-// Authentication 
-
-Authentication_git = function () { // return our github instance if connection has succeed
-  // init API
-  const Octokit = require("@octokit/rest");
-  if (GetGithubToken() != "anon") { // if not in anonymous mode
-    // basic auth
-    var octokit = new Octokit({  // "octokit" is our Github bot client
-      auth: GetGithubToken,
-      userAgent: 'octokit/rest.js v1.2.3',
-      previews: ['jean-grey', 'symmetra', 'starfox-preview', 'inertia-preview'],
-      timeZone: 'Europe/Amsterdam',
-      baseUrl: 'https://api.github.com',
-      log: {
-        debug: () => { },
-        info: () => { },
-        warn: console.warn,
-        error: console.error
-      },
-    });
-    return octokit;
-  } else {
-    var octokit = new Octokit({  // "octokit" is our Github bot client
-      userAgent: 'octokit/rest.js v1.2.3',
-      previews: ['jean-grey', 'symmetra', 'starfox-preview', 'inertia-preview'],
-      timeZone: 'Europe/Amsterdam',
-      baseUrl: 'https://api.github.com',
-      log: {
-        debug: () => { },
-        info: () => { },
-        warn: console.warn,
-        error: console.error
-      },
-    });
-    return octokit;
-  }
-}
-
-exports.GetError = async function () {  // retrieve errors from the github repo
-  var octokit = Authentication_git()
-  let data = await octokit.paginate("GET /repos/:owner/:repo/issues", {
-    owner: GetGithubRepoInfo("Owner"),
-    repo: GetGithubRepoInfo("Name")
-  }) // Update data from github repo
-  // send errors to the discord bot
-  const D_Utils = require('./bot.D_utils.js');
-  D_Utils.DisplayError(Check_error(data))
-};
-
-
-// Get Rules info
-
-GetRules = function () {
-  const fs = require('fs');
-  rawdata = fs.readFileSync('Rules.json');
-  var Rules = JSON.parse(rawdata);
-  return Rules;
-}
-
-
 // Apply Rules
 
-Check_error = function (data) {
-  Rules = GetRules()  // Get Rules
+exports.Check_error = function (data) {
+  var Rules = Sjs.extract('Rules.json')  // Get Rules
   var Error_found = []  // init Error_found array
 
   if (Rules.IssuesNeedLabel == "true") { // if the following Rules is enable
     // Check if she's respected
-    error = Check_IssuesNeedLabel(data) // return an array of all issues that do not follow this rule
+    var error = Check_IssuesNeedLabel(data) // return an array of all issues that do not follow this rule
     if (error.length != 0) { // if we found errors about this rule
       Error_found.push(error) // add them to the Error_found array
     }
@@ -143,11 +62,11 @@ Check_error = function (data) {
   Errors format : [Issue/pull Title,Issue/pull URL,User that create it,"Error msg"]
 */
 
-Check_IssuesNeedLabel = function (data) {
-  Issues = data // get issues info
+function Check_IssuesNeedLabel (data) {
+  let Issues = data // get issues info
   var errors_found = [] // init local errors_found array
   if (Issues != undefined) {
-    for (i = 0; i < Issues.length; i++) { // check all issues/pulls
+    for (let i = 0; i < Issues.length; i++) { // check all issues/pulls
       // if has 0 labels and isn't a pull request
       if (Issues[i].labels.length == 0 && Issues[i].pull_request == undefined) {
         // Add issue to the errors_found array
@@ -160,11 +79,11 @@ Check_IssuesNeedLabel = function (data) {
 
 }
 
-Check_IssuesAssignee = function (data) {
-  Issues = data
+function Check_IssuesAssignee (data) {
+  let Issues = data
   var errors_found = []
   if (Issues != undefined) {
-    for (i = 0; i < Issues.length; i++) {
+    for (let i = 0; i < Issues.length; i++) {
       // if has no assignee and isn't a pull request
       if (Issues[i].assignee == null && Issues[i].pull_request == undefined) {
         errors_found.push([Issues[i].title, Issues[i].html_url, Issues[i].user.login, "Missing Assignee!"])
@@ -175,11 +94,11 @@ Check_IssuesAssignee = function (data) {
 
 }
 
-Check_IssueMinimalBody = function (data, Body_size) {
-  Issues = data
+function Check_IssueMinimalBody (data, Body_size) {
+  let Issues = data
   var errors_found = []
   if (Issues != undefined) {
-    for (i = 0; i < Issues.length; i++) {
+    for (let i = 0; i < Issues.length; i++) {
       if (Issues[i].body == null && Issues[i].pull_request == undefined) {
         // if body is null and isn't a pull request
         errors_found.push([Issues[i].title, Issues[i].html_url, Issues[i].user.login, `Body to small!(0/${Body_size})`])
@@ -194,11 +113,11 @@ Check_IssueMinimalBody = function (data, Body_size) {
 
 }
 
-Check_PullNeedToFix = function (data) {
-  Issues = data
+function Check_PullNeedToFix (data) {
+  let Issues = data
   var errors_found = []
   if (Issues != undefined) {
-    for (i = 0; i < Issues.length; i++) {
+    for (let i = 0; i < Issues.length; i++) {
 
       if (Issues[i].body == null) {
         if (Issues[i].pull_request != undefined) {
@@ -216,11 +135,11 @@ Check_PullNeedToFix = function (data) {
 
 }
 
-Check_PullNeedAssigneeWIP = function (data) {
-  Issues = data
+function Check_PullNeedAssigneeWIP (data) {
+  let Issues = data
   var errors_found = []
   if (Issues != undefined) {
-    for (i = 0; i < Issues.length; i++) {
+    for (let i = 0; i < Issues.length; i++) {
       if (Issues[i].pull_request != undefined && Issues[i].assignee == null) {
         if (String(Issues[i].title).includes('WIP') || String(Issues[i].title).includes('Work in progress') || String(Issues[i].title).includes('🚧')) {
           // if is an pull request without assignee that contain a WIP keyword
@@ -233,11 +152,11 @@ Check_PullNeedAssigneeWIP = function (data) {
 
 }
 
-Check_AssignedIssueNeedMstone = function (data) {
-  Issues = data
+function Check_AssignedIssueNeedMstone (data) {
+  let Issues = data
   var errors_found = []
   if (Issues != undefined) {
-    for (i = 0; i < Issues.length; i++) {
+    for (let i = 0; i < Issues.length; i++) {
       if (Issues[i].assignee != null && Issues[i].pull_request == undefined && Issues[i].milestone == null) {
         errors_found.push([Issues[i].title, Issues[i].html_url, Issues[i].user.login, 'Assigned issue need a Milestone'])
       }

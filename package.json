@@ -6,12 +6,16 @@
   "dependencies": {
     "@octokit/rest": "16.36.0",
     "@quentingruber/simple-json": "^1.0.1",
-    "discord.js": "^11.5.1"
+    "@types/node": "^13.11.0",
+    "discord.js": "^11.5.1",
+    "typescript": "^3.8.3"
   },
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "bot.js"
+    "start": "tsc ./Gitord.ts & tsc ./Errors_Utils.ts & node Gitord.js",
+    "compile": "tsc ./Gitord.ts & tsc ./Errors_Utils.ts & echo Typescript compiled ! ",
+    "bot": "node Gitord.js"
   },
   "repository": {
     "type": "git",
