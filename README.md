@@ -41,6 +41,6 @@ Check `config.json` to change some default setting such as the Refresh Time, mor
 
 More info about the available rules [here](https://github.com/QuentinGruber/Gitord/wiki/Rules-info).
 
-To start the bot run `node bot.js`
+To start the bot run `npm start` ( don't forget to `npm i` to download dependencies)
 
 Used Node.js version 12.13.0
