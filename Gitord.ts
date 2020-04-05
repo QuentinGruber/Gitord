@@ -9,20 +9,20 @@ class Gitord {
     Sjs: any;
 
     RefreshTime: number;
-    WorkHours: any;
-    WorkDays: any;
+    WorkHours: Array<Array<number>>;
+    WorkDays: Array<number>;
 
     // Discord stuff
     Discord_bot: any;
-    Discord_token: any;
-    Chanel_id: any;
-    User_list: any;
+    Discord_token: string;
+    Chanel_id: string;
+    User_list: Array<string>;
 
     // Github stuff
     octokit: any;
-    Github_token: any;
-    Github_Repo_owner: any;
-    Github_Repo_name: any;
+    Github_token: string;
+    Github_Repo_owner: string;
+    Github_Repo_name: string;
 
     constructor() {
 
@@ -144,7 +144,7 @@ class Gitord {
     }
 
     LaunchInterval() {
-       setInterval(()=>{this.MainLoop()},this.RefreshTime*1000 )  // Check & display error every T time
+        setInterval(() => { this.MainLoop() }, this.RefreshTime * 1000)  // Check & display error every T time
     }
 
     MainLoop() {
@@ -156,10 +156,15 @@ class Gitord {
             var today = new Date(); // get new Date info
             for (var i = 0; i < this.WorkDays.length; i++) {
                 if (this.WorkDays[i] == today.getDay()) { // if it's a workDay
-                    for (var j = 0; j < this.WorkHours.length; j++) {
-                        if (today.getHours() - this.WorkHours[j][0] >= 0 && today.getHours() - this.WorkHours[j][0] <= 0) { // if it's a workHour
-                            this.GetError()
+                    if (this.WorkDays.length != 0) {
+                        for (var j = 0; j < this.WorkHours.length; j++) {
+                            if (today.getHours() - this.WorkHours[j][0] >= 0 && today.getHours() - this.WorkHours[j][0] <= 0) { // if it's a workHour
+                                this.GetError()
+                            }
                         }
+                    }
+                    else { // if no work hours as being specified
+                        this.GetError()
                     }
                 }
             }

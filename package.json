@@ -13,7 +13,7 @@
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "tsc ./Gitord.ts & node Gitord.js"
+    "start": "tsc ./Gitord.ts & tsc ./Errors_Utils & node Gitord.js"
   },
   "repository": {
     "type": "git",
