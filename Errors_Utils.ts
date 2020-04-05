@@ -15,7 +15,7 @@ exports.Check_error = function (data) {
 
   if (Rules.IssuesNeedLabel == "true") { // if the following Rules is enable
     // Check if she's respected
-    error = Check_IssuesNeedLabel(data) // return an array of all issues that do not follow this rule
+    var error = Check_IssuesNeedLabel(data) // return an array of all issues that do not follow this rule
     if (error.length != 0) { // if we found errors about this rule
       Error_found.push(error) // add them to the Error_found array
     }
@@ -62,11 +62,11 @@ exports.Check_error = function (data) {
   Errors format : [Issue/pull Title,Issue/pull URL,User that create it,"Error msg"]
 */
 
-Check_IssuesNeedLabel = function (data) {
-  Issues = data // get issues info
+function Check_IssuesNeedLabel (data) {
+  let Issues = data // get issues info
   var errors_found = [] // init local errors_found array
   if (Issues != undefined) {
-    for (i = 0; i < Issues.length; i++) { // check all issues/pulls
+    for (let i = 0; i < Issues.length; i++) { // check all issues/pulls
       // if has 0 labels and isn't a pull request
       if (Issues[i].labels.length == 0 && Issues[i].pull_request == undefined) {
         // Add issue to the errors_found array
@@ -79,11 +79,11 @@ Check_IssuesNeedLabel = function (data) {
 
 }
 
-Check_IssuesAssignee = function (data) {
-  Issues = data
+function Check_IssuesAssignee (data) {
+  let Issues = data
   var errors_found = []
   if (Issues != undefined) {
-    for (i = 0; i < Issues.length; i++) {
+    for (let i = 0; i < Issues.length; i++) {
       // if has no assignee and isn't a pull request
       if (Issues[i].assignee == null && Issues[i].pull_request == undefined) {
         errors_found.push([Issues[i].title, Issues[i].html_url, Issues[i].user.login, "Missing Assignee!"])
@@ -94,11 +94,11 @@ Check_IssuesAssignee = function (data) {
 
 }
 
-Check_IssueMinimalBody = function (data, Body_size) {
-  Issues = data
+function Check_IssueMinimalBody (data, Body_size) {
+  let Issues = data
   var errors_found = []
   if (Issues != undefined) {
-    for (i = 0; i < Issues.length; i++) {
+    for (let i = 0; i < Issues.length; i++) {
       if (Issues[i].body == null && Issues[i].pull_request == undefined) {
         // if body is null and isn't a pull request
         errors_found.push([Issues[i].title, Issues[i].html_url, Issues[i].user.login, `Body to small!(0/${Body_size})`])
@@ -113,11 +113,11 @@ Check_IssueMinimalBody = function (data, Body_size) {
 
 }
 
-Check_PullNeedToFix = function (data) {
-  Issues = data
+function Check_PullNeedToFix (data) {
+  let Issues = data
   var errors_found = []
   if (Issues != undefined) {
-    for (i = 0; i < Issues.length; i++) {
+    for (let i = 0; i < Issues.length; i++) {
 
       if (Issues[i].body == null) {
         if (Issues[i].pull_request != undefined) {
@@ -135,11 +135,11 @@ Check_PullNeedToFix = function (data) {
 
 }
 
-Check_PullNeedAssigneeWIP = function (data) {
-  Issues = data
+function Check_PullNeedAssigneeWIP (data) {
+  let Issues = data
   var errors_found = []
   if (Issues != undefined) {
-    for (i = 0; i < Issues.length; i++) {
+    for (let i = 0; i < Issues.length; i++) {
       if (Issues[i].pull_request != undefined && Issues[i].assignee == null) {
         if (String(Issues[i].title).includes('WIP') || String(Issues[i].title).includes('Work in progress') || String(Issues[i].title).includes('🚧')) {
           // if is an pull request without assignee that contain a WIP keyword
@@ -152,11 +152,11 @@ Check_PullNeedAssigneeWIP = function (data) {
 
 }
 
-Check_AssignedIssueNeedMstone = function (data) {
-  Issues = data
+function Check_AssignedIssueNeedMstone (data) {
+  let Issues = data
   var errors_found = []
   if (Issues != undefined) {
-    for (i = 0; i < Issues.length; i++) {
+    for (let i = 0; i < Issues.length; i++) {
       if (Issues[i].assignee != null && Issues[i].pull_request == undefined && Issues[i].milestone == null) {
         errors_found.push([Issues[i].title, Issues[i].html_url, Issues[i].user.login, 'Assigned issue need a Milestone'])
       }
