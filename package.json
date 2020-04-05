@@ -13,7 +13,9 @@
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "tsc ./Gitord.ts & tsc ./Errors_Utils & node Gitord.js"
+    "start": "tsc ./Gitord.ts & tsc ./Errors_Utils.ts & node Gitord.js",
+    "compile": "tsc ./Gitord.ts & tsc ./Errors_Utils.ts & echo Typescript compiled ! ",
+    "bot": "node Gitord.js"
   },
   "repository": {
     "type": "git",
