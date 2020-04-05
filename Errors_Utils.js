@@ -7,77 +7,6 @@ All rights reserved.
 // Extract Auth JSON data
 var Sjs = require('@quentingruber/simple-json');
 
-GetAuthData = function () {
-  return Sjs.extract("auth.json");
-}
-
-GetGithubToken = function () {  // used to extract all Github's info in Auth.json
-  var AuthData = GetAuthData();
-  return AuthData.Github_token;
-};
-GetGithubRepoInfo = function (Asked) {  // used to extract all Github's info in Auth.json
-  var AuthData = GetAuthData();
-  if (Asked == "Owner") {
-    return AuthData.Github_Repo_owner;
-  }
-  else if (Asked == "Name") {
-    return AuthData.Github_Repo_name;
-  }
-  else {
-    Console.error("GetGithubRepoInfo() doesn't provide an valid Asked value! [Owner/Name]")
-  }
-};
-
-// Authentication 
-
-Authentication_git = function () { // return our github instance if connection has succeed
-  // init API
-  const Octokit = require("@octokit/rest");
-  if (GetGithubToken() != "anon") { // if not in anonymous mode
-    // basic auth
-    var octokit = new Octokit({  // "octokit" is our Github bot client
-      auth: GetGithubToken,
-      userAgent: 'octokit/rest.js v1.2.3',
-      previews: ['jean-grey', 'symmetra', 'starfox-preview', 'inertia-preview'],
-      timeZone: 'Europe/Amsterdam',
-      baseUrl: 'https://api.github.com',
-      log: {
-        debug: () => { },
-        info: () => { },
-        warn: console.warn,
-        error: console.error
-      },
-    });
-    return octokit;
-  } else {
-    var octokit = new Octokit({  // "octokit" is our Github bot client
-      userAgent: 'octokit/rest.js v1.2.3',
-      previews: ['jean-grey', 'symmetra', 'starfox-preview', 'inertia-preview'],
-      timeZone: 'Europe/Amsterdam',
-      baseUrl: 'https://api.github.com',
-      log: {
-        debug: () => { },
-        info: () => { },
-        warn: console.warn,
-        error: console.error
-      },
-    });
-    return octokit;
-  }
-}
-
-exports.GetError = async function () {  // retrieve errors from the github repo
-  var octokit = Authentication_git()
-  let data = await octokit.paginate("GET /repos/:owner/:repo/issues", {
-    owner: GetGithubRepoInfo("Owner"),
-    repo: GetGithubRepoInfo("Name")
-  }) // Update data from github repo
-  // send errors to the discord bot
-  const D_Utils = require('./bot.D_utils.js');
-  D_Utils.DisplayError(Check_error(data))
-};
-
-
 // Get Rules info
 
 GetRules = function () {
@@ -90,7 +19,7 @@ GetRules = function () {
 
 // Apply Rules
 
-Check_error = function (data) {
+exports.Check_error = function (data) {
   Rules = GetRules()  // Get Rules
   var Error_found = []  // init Error_found array
 
