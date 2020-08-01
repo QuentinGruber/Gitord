@@ -2,10 +2,9 @@
   "name": "gitord",
   "version": "0.4.0",
   "description": "d",
-  "main": "bot.js",
+  "main": "Gitord.js",
   "dependencies": {
     "@octokit/rest": "16.36.0",
-    "@quentingruber/simple-json": "^1.0.1",
     "@types/node": "^13.11.0",
     "discord.js": "^11.5.1",
     "typescript": "^3.8.3"
