@@ -1,6 +1,6 @@
 {
   "name": "gitord",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "Gitord is a free and open-source 'bot template' that alerts you in the Discord Chanel of your choice if your github repository does not respect the rules you apply to it.",
   "main": "Gitord.js",
   "dependencies": {
