@@ -29,7 +29,7 @@ bot.Start();
 ```
 
 - 'Discord_token'
-- 'Github*token' \_by leaving "anon" as a parameter of Github_token you can use Gitord anonymously, only for public directories and with an API rate limit*
+- 'Github_token' *by leaving "anon" as a parameter of Github_token you can use Gitord anonymously, only for public directories and with an API rate limit*
 - 'Github_Repo_owner'
 - 'Github_Repo_name'
 
