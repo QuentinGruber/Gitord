@@ -72,7 +72,7 @@ var Gitord = /** @class */ (function () {
             IssueMinimalBody: 20,
             PullNeedToFix: true,
             PullNeedAssigneeWIP: true,
-            AssignedIssueNeedMstone: true
+            AssignedIssueNeedMstone: false
         };
         // init
         this.error_utils = new Errors_Utils_1.error_utils();

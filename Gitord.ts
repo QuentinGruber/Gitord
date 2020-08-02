@@ -69,7 +69,7 @@ export class Gitord {
       IssueMinimalBody: 20,
       PullNeedToFix: true,
       PullNeedAssigneeWIP: true,
-      AssignedIssueNeedMstone: true,
+      AssignedIssueNeedMstone: false,
     };
 
     // init
