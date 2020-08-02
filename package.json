@@ -1,21 +1,17 @@
 {
   "name": "gitord",
   "version": "0.4.0",
-  "description": "d",
-  "main": "bot.js",
+  "description": "Gitord is a free and open-source 'bot template' that alerts you in the Discord Chanel of your choice if your github repository does not respect the rules you apply to it.",
+  "main": "Gitord.js",
   "dependencies": {
     "@octokit/rest": "16.36.0",
-    "@quentingruber/simple-json": "^1.0.1",
     "@types/node": "^13.11.0",
     "discord.js": "^11.5.1",
     "typescript": "^3.8.3"
   },
-  "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "tsc ./Gitord.ts && tsc ./Errors_Utils.ts && node Gitord.js",
-    "compile": "tsc ./Gitord.ts && tsc ./Errors_Utils.ts && echo Typescript compiled ! ",
-    "bot": "node Gitord.js"
+    "start": "tsc ./run_Gitord.ts && node run_Gitord.js",
+    "compile": "tsc ./Gitord.ts"
   },
   "repository": {
     "type": "git",
@@ -24,10 +20,11 @@
   "keywords": [
     "Git",
     "Discord",
-    "Kanban"
+    "Kanban",
+    "Management"
   ],
   "author": "QuentinGruber",
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "BSD 3-Clause License",
   "bugs": {
     "url": "https://github.com/QuentinGruber/Gitord/issues"
   },
