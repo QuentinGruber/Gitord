@@ -10,7 +10,8 @@
     "typescript": "^3.8.3"
   },
   "scripts": {
-    "start": "tsc ./run_Gitord.ts && node run_Gitord.js"
+    "start": "tsc ./run_Gitord.ts && node run_Gitord.js",
+    "compile": "tsc ./Gitord.ts"
   },
   "repository": {
     "type": "git",

@@ -14,25 +14,27 @@ interface Rules {
 }
 
 export class Gitord {
+  console_errors: boolean;
+  welcome_message: boolean;
   RefreshTime: number;
   WorkHours: Array<Array<number>>;
   WorkDays: Array<number>;
 
   // Discord stuff
-  Discord_bot: any;
-  Discord_token: string;
+  private Discord_bot: any;
+  private Discord_token: string;
   Chanel_id: string;
   User_list: Array<string>;
 
   // Github stuff
-  octokit: any;
-  Github_token: string;
-  Github_Repo_owner: string;
-  Github_Repo_name: string;
+  private octokit: any;
+  private Github_token: string;
+  private Github_Repo_owner: string;
+  private Github_Repo_name: string;
 
   // Rules
   Rules: Rules;
-  error_utils: any; //TODO
+  private error_utils: any; //TODO
 
   constructor(
     Discord_token: string,
@@ -42,6 +44,8 @@ export class Gitord {
     Chanel_id: string = ""
   ) {
     // config
+    this.console_errors = true;
+    this.welcome_message = true;
     this.RefreshTime = 10;
     this.WorkHours = [];
     this.WorkDays = [];
@@ -135,10 +139,14 @@ export class Gitord {
       // is logged in
       console.log(`Logged in as ${this.Discord_bot.user.tag} (Discord)!`);
       try {
-        this.Discord_bot.channels.get(this.Chanel_id).send("Bot connected !");
+        if (this.welcome_message) {
+          this.Discord_bot.channels
+            .get(this.Chanel_id)
+            .send("Gitord connected !");
+        }
         this.Start(); // when bot is setup on discord
       } catch (e) {
-        throw new Error("Wrong chanel id ! Fill it in auth.json");
+        throw new Error("Wrong chanel id !");
       }
     });
   }
@@ -155,7 +163,13 @@ export class Gitord {
 
   // Send errors message in Discord Channel
   private DisplayError(errors) {
-    console.log(errors);
+    if (this.console_errors) {
+      if (errors.length === 0) {
+        console.log("Gitord haven't find any error !");
+      } else {
+        console.log(errors);
+      }
+    }
     // Create an array of all msg that have to be send
     var msgList = [];
     for (let i = 0; i < errors.length; i++) {

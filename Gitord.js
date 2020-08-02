@@ -50,6 +50,8 @@ var Gitord = /** @class */ (function () {
         if (Github_Repo_name === void 0) { Github_Repo_name = "repo_test"; }
         if (Chanel_id === void 0) { Chanel_id = ""; }
         // config
+        this.console_errors = true;
+        this.welcome_message = true;
         this.RefreshTime = 10;
         this.WorkHours = [];
         this.WorkDays = [];
@@ -138,11 +140,15 @@ var Gitord = /** @class */ (function () {
             // is logged in
             console.log("Logged in as " + _this.Discord_bot.user.tag + " (Discord)!");
             try {
-                _this.Discord_bot.channels.get(_this.Chanel_id).send("Bot connected !");
+                if (_this.welcome_message) {
+                    _this.Discord_bot.channels
+                        .get(_this.Chanel_id)
+                        .send("Gitord connected !");
+                }
                 _this.Start(); // when bot is setup on discord
             }
             catch (e) {
-                throw new Error("Wrong chanel id ! Fill it in auth.json");
+                throw new Error("Wrong chanel id !");
             }
         });
     };
@@ -166,7 +172,14 @@ var Gitord = /** @class */ (function () {
     };
     // Send errors message in Discord Channel
     Gitord.prototype.DisplayError = function (errors) {
-        console.log(errors);
+        if (this.console_errors) {
+            if (errors.length === 0) {
+                console.log("Gitord haven't find any error !");
+            }
+            else {
+                console.log(errors);
+            }
+        }
         // Create an array of all msg that have to be send
         var msgList = [];
         for (var i = 0; i < errors.length; i++) {
