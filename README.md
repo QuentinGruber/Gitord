@@ -1,4 +1,4 @@
-# Gitord [![codebeat badge](https://codebeat.co/badges/042f97b4-6da9-4120-94df-9b6bacf25b8b)](https://codebeat.co/projects/github-com-quentingruber-gitord-master) [![npm version](http://img.shields.io/npm/v/gitord.svg?style=flat)](https://npmjs.org/package/gitord "View this project on npm")
+# Gitord [![npm version](http://img.shields.io/npm/v/gitord.svg?style=flat)](https://npmjs.org/package/gitord "View this project on npm")
 
 ## Description
 
