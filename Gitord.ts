@@ -3,6 +3,15 @@ BSD 3-Clause License
 Copyright (c) 2020, Quentin Gruber
 All rights reserved.
 */
+import { error_utils } from "./Errors_Utils";
+interface Rules {
+  IssuesNeedLabel: boolean;
+  IssuesNeedAssignee: boolean;
+  IssueMinimalBody: number;
+  PullNeedToFix: boolean;
+  PullNeedAssigneeWIP: boolean;
+  AssignedIssueNeedMstone: boolean;
+}
 
 export class Gitord {
   RefreshTime: number;
@@ -21,26 +30,26 @@ export class Gitord {
   Github_Repo_owner: string;
   Github_Repo_name: string;
 
+  // Rules
+  Rules: Rules;
+  error_utils: any; //TODO
+
   constructor(
     Discord_token: string,
     Github_token: string = "anon",
     Github_Repo_owner: string = "test-kanban-bot",
     Github_Repo_name: string = "repo_test",
-    Chanel_id: string = "",
-    RefreshTime: number = 10,
-    WorkHours: Array<Array<number>> = [],
-    WorkDays: Array<number> = [],
-    User_list: Array<string> = []
+    Chanel_id: string = ""
   ) {
     // config
-    this.RefreshTime = RefreshTime;
-    this.WorkHours = WorkHours;
-    this.WorkDays = WorkDays;
+    this.RefreshTime = 10;
+    this.WorkHours = [];
+    this.WorkDays = [];
 
     // Discord stuff
     this.Discord_token = Discord_token;
     this.Chanel_id = Chanel_id;
-    this.User_list = User_list;
+    this.User_list = [];
     this.Authentication_Discord();
 
     // Github stuff
@@ -49,7 +58,18 @@ export class Gitord {
     this.Github_Repo_name = Github_Repo_name;
     this.octokit = this.Authentication_git();
 
+    // Rules
+    this.Rules = {
+      IssuesNeedLabel: true,
+      IssuesNeedAssignee: true,
+      IssueMinimalBody: 20,
+      PullNeedToFix: true,
+      PullNeedAssigneeWIP: true,
+      AssignedIssueNeedMstone: true,
+    };
+
     // init
+    this.error_utils = new error_utils();
     this.MainLoop = this.MainLoop.bind(this);
   }
 
@@ -130,8 +150,7 @@ export class Gitord {
       repo: this.Github_Repo_name,
     }); // Update data from github repo
     // send errors to the discord bot
-    const Errors_Utils = require("./Errors_Utils.js");
-    this.DisplayError(Errors_Utils.Check_error(data));
+    this.DisplayError(this.error_utils.Check_error(data));
   }
 
   // Send errors message in Discord Channel
