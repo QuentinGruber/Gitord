@@ -36,6 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
+exports.Gitord = void 0;
 /*
 BSD 3-Clause License
 Copyright (c) 2020, Quentin Gruber
