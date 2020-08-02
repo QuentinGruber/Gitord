@@ -150,7 +150,7 @@ export class Gitord {
       repo: this.Github_Repo_name,
     }); // Update data from github repo
     // send errors to the discord bot
-    this.DisplayError(this.error_utils.Check_error(data));
+    this.DisplayError(this.error_utils.Check_error(data, this.Rules));
   }
 
   // Send errors message in Discord Channel
