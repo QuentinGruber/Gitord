@@ -1,11 +1,13 @@
 import { Gitord } from "./Gitord";
 var bot = new Gitord(
-  "Discord Token",
-  "anon",
+  "Discord token",
+  "Github token",
   "test-kanban-bot",
   "repo_test",
-  "ChanelID"
+  "Discord chanel ID"
 );
-bot.RefreshTime = 4;
-bot.Rules.IssueMinimalBody = 8;
+bot.welcome_message = false;
+bot.RefreshTime = 5;
+bot.Rules.IssueMinimalBody = 1;
+bot.Rules.PullNeedToFix = false;
 bot.Start();
