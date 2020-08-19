@@ -35,8 +35,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-exports.__esModule = true;
-exports.Gitord = void 0;
+Object.defineProperty(exports, "__esModule", { value: true });
 /*
 BSD 3-Clause License
 Copyright (c) 2020, Quentin Gruber
@@ -72,7 +71,7 @@ var Gitord = /** @class */ (function () {
             IssueMinimalBody: 20,
             PullNeedToFix: true,
             PullNeedAssigneeWIP: true,
-            AssignedIssueNeedMstone: false
+            AssignedIssueNeedMstone: false,
         };
         // init
         this.error_utils = new Errors_Utils_1.error_utils();
@@ -101,8 +100,8 @@ var Gitord = /** @class */ (function () {
                     debug: function () { },
                     info: function () { },
                     warn: console.warn,
-                    error: console.error
-                }
+                    error: console.error,
+                },
             });
             return octokit;
         }
@@ -122,8 +121,8 @@ var Gitord = /** @class */ (function () {
                     debug: function () { },
                     info: function () { },
                     warn: console.warn,
-                    error: console.error
-                }
+                    error: console.error,
+                },
             });
             return octokit;
         }
@@ -159,7 +158,7 @@ var Gitord = /** @class */ (function () {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.octokit.paginate("GET /repos/:owner/:repo/issues", {
                             owner: this.Github_Repo_owner,
-                            repo: this.Github_Repo_name
+                            repo: this.Github_Repo_name,
                         })];
                     case 1:
                         data = _a.sent();

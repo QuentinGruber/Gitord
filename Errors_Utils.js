@@ -1,6 +1,5 @@
 "use strict";
-exports.__esModule = true;
-exports.error_utils = void 0;
+Object.defineProperty(exports, "__esModule", { value: true });
 /*
 BSD 3-Clause License
 Copyright (c) 2020, Quentin Gruber
